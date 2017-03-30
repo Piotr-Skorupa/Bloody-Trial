@@ -15,7 +15,9 @@ public:
 	bool isMoving;
 	sf::Texture trup;
 	sf::Sprite zombi;
+	
 	Zombie();
 	~Zombie();
+	void draw(sf::RenderWindow &window);
 };
 

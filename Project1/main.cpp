@@ -12,6 +12,7 @@
 #include "Hero.h"
 #include "Spell1.h"
 #include "Stats.h"
+#include "Zombie.h"
 
 
 int main(void) {
@@ -35,12 +36,20 @@ int main(void) {
 	text.loadFromFile("src/sure.png");
 	sf::Sprite text1;
 	text1.setTexture(text);
+
+	sf::Texture mapa;
+	sf::Sprite map;
+	mapa.loadFromFile("src/pruba.png");
+	map.setTexture(mapa);
+	map.setPosition(0, 0);
 	
 
 	Menu menu;
 	Game game;
 	Options options;
 	Hero heros;
+	//pruba zombie
+	Zombie z;
 	
 	float mana = heros.stan_many();
 	float mana_max = heros.getManaMax();
@@ -228,6 +237,8 @@ int main(void) {
 			options.draw(window);
 			break;
 		case 2:
+			window.clear();
+			window.draw(map);
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
 			m = (mana / mana_max) * 100;
@@ -249,6 +260,7 @@ int main(void) {
 			game.level.setPosition(heros.x - 650, heros.y + 390);
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
+			z.draw(window);
 			game.draw(window);
 			window.draw(heros.zyc);
 			window.draw(heros.man);

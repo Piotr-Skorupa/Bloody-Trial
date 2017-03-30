@@ -17,11 +17,11 @@ public:
 	int stan_many();
 	int getManaMax();
 	void newgame();
+	
 	int potki_zycia;
 	int potki_many;
 	int money;
 	int nr_broni;
-
 	bool isMoving;
 	bool up;
 	bool down;

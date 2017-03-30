@@ -6,8 +6,8 @@ Zombie::Zombie()
 {
 	_hp = 30;
 	_dmg = 5;
-	x = 400;
-	y = 200;
+	x = 700;
+	y = 400;
 	isMoving = true;
 	trup.loadFromFile("src/zombie.png");
 	zombi.setTexture(trup);
@@ -15,6 +15,9 @@ Zombie::Zombie()
 
 }
 
+void Zombie::draw(sf::RenderWindow &window) {
+	window.draw(zombi);
+}
 
 Zombie::~Zombie()
 {

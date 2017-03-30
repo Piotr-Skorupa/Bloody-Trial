@@ -9,8 +9,6 @@ public:
 	sf::Texture t2;
 	sf::Sprite tutorial1;
 	sf::Sprite tutorial2;
-	sf::Texture mapa;
-	sf::Sprite map;
 	sf::Texture zycie;
 	sf::Sprite life;
 	sf::Texture czar;

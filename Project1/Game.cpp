@@ -11,9 +11,6 @@ Game::Game()
 	tutorial2.setTexture(t2);
 	tutorial1.setPosition(0, 0);
 	tutorial2.setPosition(0, 0);
-	mapa.loadFromFile("src/pruba.png");
-	map.setTexture(mapa);
-	map.setPosition(0, 0);
 	zycie.loadFromFile("src/zycie.png");
 	czar.loadFromFile("src/mana.png");
 	czar075.loadFromFile("src/mana075.png");
@@ -48,8 +45,7 @@ void Game::tutorial(sf::RenderWindow &window, bool f) {
 }
 
 void Game::draw(sf::RenderWindow &window) {
-	window.clear();
-	window.draw(map);
+	
 	window.draw(label);
 	window.draw(life);
 	window.draw(level);
