@@ -2,6 +2,8 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
+#include <random>
+#include <ctime>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
@@ -49,8 +51,13 @@ int main(void) {
 	Options options;
 	Hero heros;
 	//pruba zombie
-	Zombie z;
 	
+	Zombie z1;
+	Zombie z[20];
+	int abc = 30;
+	z1.take_dmg(abc);
+	
+
 	float mana = heros.stan_many();
 	float mana_max = heros.getManaMax();
 	std::vector<Spell1> spellVec;
@@ -260,7 +267,10 @@ int main(void) {
 			game.level.setPosition(heros.x - 650, heros.y + 390);
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
-			z.draw(window);
+			for (int i = 0; i < 20; i++) {
+				z[i].draw(window);
+			}
+			z1.draw(window);
 			game.draw(window);
 			window.draw(heros.zyc);
 			window.draw(heros.man);
