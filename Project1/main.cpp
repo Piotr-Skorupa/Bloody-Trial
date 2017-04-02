@@ -287,7 +287,7 @@ int main(void) {
 				if (kierunek_z == 3) z[i].moveUp();
 				if (kierunek_z == 4) z[i].moveDown();
 				z[i].draw(window);
-				if (abs(heros.x - z[i].x) <= 50 || abs(heros.y - z[i].y) >= 50) {
+				if (abs(heros.x - z[i].x) <= 50 && abs(heros.y - z[i].y) >= 50) {
 					heros.take_dmg(z[i].attack());
 				}
 			}
