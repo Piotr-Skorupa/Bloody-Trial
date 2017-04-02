@@ -24,7 +24,7 @@ public:
 	Zombie();
 	~Zombie();
 	void draw(sf::RenderWindow &window);
-	void take_dmg(int& a);
+	void take_dmg(int a);
 	int attack();
 	void moveLeft();
 	void moveRight();

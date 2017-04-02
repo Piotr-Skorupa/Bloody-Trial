@@ -20,12 +20,16 @@
 int main(void) {
 	
 	//zmienne
+	int nrAtakowanego = 0;
 	int stan_okna = 0;
 	bool isFullscreen = false;
 	bool isGamerunning = false;
 	bool isFiring = false;
+	bool isAttack_possible = false;
 	float m;
 	int kierunek_z;
+	sf::Time time;
+	
 	
 	//WINDOW
 	sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
@@ -86,6 +90,12 @@ int main(void) {
 	if (!aaa.loadFromFile("src/atak_powietrze.wav"))
 		return -1; // error
 	attack_air.setBuffer(aaa);
+
+	sf::SoundBuffer aaaa;
+	sf::Sound attack_cel;
+	if (!aaaa.loadFromFile("src/atak_cel.wav"))
+		return -1; // error
+	attack_cel.setBuffer(aaaa);
 
 	sf::SoundBuffer sb1;
 	sf::Sound gamemusic;
@@ -237,9 +247,11 @@ int main(void) {
 				isFiring = true;
 				}
 			if (stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-				heros.attack();
-				attack_air.play();
-				
+				if (isAttack_possible == false) { attack_air.play(); }
+				else if (isAttack_possible == true) {
+					z[nrAtakowanego].take_dmg(heros.attack());
+					attack_cel.play();
+					}
 				}
 
 		}
@@ -287,9 +299,13 @@ int main(void) {
 				if (kierunek_z == 3) z[i].moveUp();
 				if (kierunek_z == 4) z[i].moveDown();
 				z[i].draw(window);
-				if (abs(heros.x - z[i].x) <= 50 && abs(heros.y - z[i].y) >= 50) {
+				if (abs(heros.hero.getPosition().x - z[i].zombi.getPosition().x )< 50 && abs(heros.hero.getPosition().y - z[i].zombi.getPosition().y) < 50) {
 					heros.take_dmg(z[i].attack());
+					isAttack_possible = true;
+					nrAtakowanego = i;
+
 				}
+				else isAttack_possible = false;
 			}
 			z1.draw(window);
 			game.draw(window);
