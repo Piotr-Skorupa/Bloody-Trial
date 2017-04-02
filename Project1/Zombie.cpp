@@ -8,7 +8,7 @@ Zombie::Zombie()
 	_hp = 30;
 	_dmg = 5;
 	x = 500 + (std::rand() % (3500 - 500 + 1));
-	y = 700 + (std::rand() % (1850 - 600 + 1));
+	y = 600 + (std::rand() % (1850 - 600 + 1));
 	isMoving = true;
 	isDead = false;
 	trup.loadFromFile("src/zombie.png");
@@ -33,8 +33,21 @@ void Zombie::take_dmg(int& a) {
 	}
 }
 
-int Zombie::attack(void) {
+int Zombie::attack() {
 	return _dmg;
+}
+
+void Zombie::moveLeft() {
+	zombi.move(-5, 0);
+}
+void Zombie::moveRight() {
+	zombi.move(5, 0);
+}
+void Zombie::moveUp() {
+	zombi.move(0, -5);
+}
+void Zombie::moveDown() {
+	zombi.move(0, 5);
 }
 
 Zombie::~Zombie()

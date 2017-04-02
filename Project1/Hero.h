@@ -17,6 +17,8 @@ public:
 	int stan_many();
 	int getManaMax();
 	void newgame();
+	int attack();
+	void take_dmg(int a);
 	
 	int potki_zycia;
 	int potki_many;

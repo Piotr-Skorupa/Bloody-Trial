@@ -9,11 +9,12 @@ class Zombie
 private:
 	int _hp;
 	int _dmg;
-	int x;
-	int y;
+	
 	
 
 public:
+	int x;
+	int y;
 	bool isMoving;
 	bool isDead;
 	sf::Texture trup;
@@ -24,6 +25,10 @@ public:
 	~Zombie();
 	void draw(sf::RenderWindow &window);
 	void take_dmg(int& a);
-	int attack(void);
+	int attack();
+	void moveLeft();
+	void moveRight();
+	void moveUp();
+	void moveDown();
 };
 

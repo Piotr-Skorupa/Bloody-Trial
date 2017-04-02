@@ -25,6 +25,7 @@ int main(void) {
 	bool isGamerunning = false;
 	bool isFiring = false;
 	float m;
+	int kierunek_z;
 	
 	//WINDOW
 	sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
@@ -79,6 +80,12 @@ int main(void) {
 	if (!strzal.loadFromFile("src/fire.wav"))
 		return -1; // error
 	ogien.setBuffer(strzal);
+
+	sf::SoundBuffer aaa;
+	sf::Sound attack_air;
+	if (!aaa.loadFromFile("src/atak_powietrze.wav"))
+		return -1; // error
+	attack_air.setBuffer(aaa);
 
 	sf::SoundBuffer sb1;
 	sf::Sound gamemusic;
@@ -228,9 +235,13 @@ int main(void) {
 			}
 			if (stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 				isFiring = true;
+				}
+			if (stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+				heros.attack();
+				attack_air.play();
 				
-				
-			}
+				}
+
 		}
 
 		window.clear();
@@ -267,8 +278,18 @@ int main(void) {
 			game.level.setPosition(heros.x - 650, heros.y + 390);
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
+			//tworzenie zombie
+			
 			for (int i = 0; i < 20; i++) {
+				kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
+				if (kierunek_z == 1) z[i].moveLeft();
+				if (kierunek_z == 2) z[i].moveRight();
+				if (kierunek_z == 3) z[i].moveUp();
+				if (kierunek_z == 4) z[i].moveDown();
 				z[i].draw(window);
+				if (abs(heros.x - z[i].x) <= 50 || abs(heros.y - z[i].y) >= 50) {
+					heros.take_dmg(z[i].attack());
+				}
 			}
 			z1.draw(window);
 			game.draw(window);
