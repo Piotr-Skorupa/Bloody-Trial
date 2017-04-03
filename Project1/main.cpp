@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,10 +17,27 @@
 #include "Stats.h"
 #include "Zombie.h"
 
+void thread_func1(Hero &heros, Zombie &z, int i, int& kierunek_z, sf::RenderWindow &window, bool& isAttack_possible, int& nrAtakowanego) {
+	kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
+	if (kierunek_z == 1) z.moveLeft();
+	if (kierunek_z == 2) z.moveRight();
+	if (kierunek_z == 3) z.moveUp();
+	if (kierunek_z == 4) z.moveDown();
+	z.draw(window);
+	if (abs(heros.hero.getPosition().x - z.zombi.getPosition().x)< 50 && abs(heros.hero.getPosition().y - z.zombi.getPosition().y) < 50) {
+		heros.take_dmg(z.attack());
+		isAttack_possible = true;
+		nrAtakowanego = i;
+
+	}
+	else isAttack_possible = false;
+	sf::sleep(sf::milliseconds(100));
+}
 
 int main(void) {
 	
 	//zmienne
+	const int zombie_counter = 20;
 	int nrAtakowanego = 0;
 	int stan_okna = 0;
 	bool isFullscreen = false;
@@ -29,6 +47,8 @@ int main(void) {
 	float m;
 	int kierunek_z;
 	sf::Time time;
+	std::thread zombie_thread[zombie_counter];
+	
 	
 	
 	//WINDOW
@@ -58,10 +78,13 @@ int main(void) {
 	//pruba zombie
 	
 	Zombie z1;
-	Zombie z[20];
+	Zombie z[zombie_counter];
 	int abc = 30;
 	z1.take_dmg(abc);
-	
+	/*
+	for (int i = 0; i < zombie_counter; i++) {
+		zombie_thread[i] = std::thread(thread_func1, &heros, &z[i], i, &kierunek_z, &window, &isAttack_possible, &nrAtakowanego);
+	}*/
 
 	float mana = heros.stan_many();
 	float mana_max = heros.getManaMax();
@@ -70,6 +93,7 @@ int main(void) {
 	int lvltxt = heros.getlvl();
 	game.lvlText(lvltxt);
 	//MUSIC (IT WORKS!)
+
 
 	
 	sf::SoundBuffer soundbuffer;
@@ -272,7 +296,10 @@ int main(void) {
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
 			m = (mana / mana_max) * 100;
-			
+			/*
+			for (int i; i < zombie_counter; i++) {
+				zombie_thread[i].join();
+			}*/
 			if (m > 90) game.mana.setTexture(game.czar);
 			else if (90 > m && m > 60)  game.mana.setTexture(game.czar075);
 			else if (60 > m && m > 35) game.mana.setTexture(game.czar05);
@@ -290,9 +317,11 @@ int main(void) {
 			game.level.setPosition(heros.x - 650, heros.y + 390);
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
+			
+
 			//tworzenie zombie
 			
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < zombie_counter ; i++) {
 				kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
 				if (kierunek_z == 1) z[i].moveLeft();
 				if (kierunek_z == 2) z[i].moveRight();
@@ -306,6 +335,7 @@ int main(void) {
 
 				}
 				else isAttack_possible = false;
+				
 			}
 			z1.draw(window);
 			game.draw(window);
