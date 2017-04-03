@@ -17,22 +17,17 @@
 #include "Stats.h"
 #include "Zombie.h"
 
-void thread_func1(Hero &heros, Zombie &z, int i, int& kierunek_z, sf::RenderWindow &window, bool& isAttack_possible, int& nrAtakowanego) {
-	kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
-	if (kierunek_z == 1) z.moveLeft();
-	if (kierunek_z == 2) z.moveRight();
-	if (kierunek_z == 3) z.moveUp();
-	if (kierunek_z == 4) z.moveDown();
-	z.draw(window);
-	if (abs(heros.hero.getPosition().x - z.zombi.getPosition().x)< 50 && abs(heros.hero.getPosition().y - z.zombi.getPosition().y) < 50) {
-		heros.take_dmg(z.attack());
-		isAttack_possible = true;
-		nrAtakowanego = i;
-
+void thread_func1(Zombie &z, int &kierunek_z, int &zombieAlive) {
+	while (zombieAlive != 0 ) {
+		kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
+		if (kierunek_z == 1) z.moveLeft();
+		if (kierunek_z == 2) z.moveRight();
+		if (kierunek_z == 3) z.moveUp();
+		if (kierunek_z == 4) z.moveDown();
+		sf::sleep(sf::milliseconds(100));
 	}
-	else isAttack_possible = false;
-	sf::sleep(sf::milliseconds(100));
 }
+
 
 int main(void) {
 	
@@ -48,8 +43,7 @@ int main(void) {
 	int kierunek_z;
 	sf::Time time;
 	std::thread zombie_thread[zombie_counter];
-	
-	
+		
 	
 	//WINDOW
 	sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
@@ -75,17 +69,8 @@ int main(void) {
 	Game game;
 	Options options;
 	Hero heros;
-	//pruba zombie
-	
-	Zombie z1;
 	Zombie z[zombie_counter];
-	int abc = 30;
-	z1.take_dmg(abc);
-	/*
-	for (int i = 0; i < zombie_counter; i++) {
-		zombie_thread[i] = std::thread(thread_func1, &heros, &z[i], i, &kierunek_z, &window, &isAttack_possible, &nrAtakowanego);
-	}*/
-
+		
 	float mana = heros.stan_many();
 	float mana_max = heros.getManaMax();
 	std::vector<Spell1> spellVec;
@@ -225,6 +210,7 @@ int main(void) {
 				gamemusic.play();
 				heros.newgame();
 				isFiring = false;
+				
 			}
 			//continue game
 			if (isGamerunning == true && sf::Mouse::isButtonPressed(sf::Mouse::Left) && position.x > 525 && position.y > 400 && position.x < 800 && position.y < 450 && stan_okna == 0) {
@@ -270,11 +256,12 @@ int main(void) {
 			if (stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 				isFiring = true;
 				}
-			if (stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+			if (stan_okna == 2  && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 				if (isAttack_possible == false) { attack_air.play(); }
 				else if (isAttack_possible == true) {
 					z[nrAtakowanego].take_dmg(heros.attack());
 					attack_cel.play();
+					isAttack_possible = false;
 					}
 				}
 
@@ -296,10 +283,18 @@ int main(void) {
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
 			m = (mana / mana_max) * 100;
+			//proba watku
 			/*
-			for (int i; i < zombie_counter; i++) {
+			for (int i = 0; i < zombie_counter; i++) {
+				zombie_thread[i] = std::thread(&thread_func1, std::ref(z[i]), std::ref(kierunek_z), std::ref(zombie_counter));
+				
+			}
+			for (int i = 0; i < zombie_counter; i++) {
 				zombie_thread[i].join();
-			}*/
+			}
+			*/
+			
+
 			if (m > 90) game.mana.setTexture(game.czar);
 			else if (90 > m && m > 60)  game.mana.setTexture(game.czar075);
 			else if (60 > m && m > 35) game.mana.setTexture(game.czar05);
@@ -319,8 +314,8 @@ int main(void) {
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
 			
 
-			//tworzenie zombie
-			
+			//poruszanie sie zombie
+			/*
 			for (int i = 0; i < zombie_counter ; i++) {
 				kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
 				if (kierunek_z == 1) z[i].moveLeft();
@@ -328,16 +323,23 @@ int main(void) {
 				if (kierunek_z == 3) z[i].moveUp();
 				if (kierunek_z == 4) z[i].moveDown();
 				z[i].draw(window);
-				if (abs(heros.hero.getPosition().x - z[i].zombi.getPosition().x )< 50 && abs(heros.hero.getPosition().y - z[i].zombi.getPosition().y) < 50) {
+								
+			}*/
+
+			// kolizja gracza z zombie (czy moga zaatakowac ? )
+			for (int i = 0; i < zombie_counter; i++) {
+				if (abs(heros.hero.getPosition().x - z[i].zombi.getPosition().x) < 90 && abs(heros.hero.getPosition().y - z[i].zombi.getPosition().y) < 90 && z[i].isDead == false) {
 					heros.take_dmg(z[i].attack());
 					isAttack_possible = true;
 					nrAtakowanego = i;
 
 				}
-				else isAttack_possible = false;
 				
 			}
-			z1.draw(window);
+			
+			for (int i = 0; i < zombie_counter; i++) {
+				z[i].draw(window);
+			}
 			game.draw(window);
 			window.draw(heros.zyc);
 			window.draw(heros.man);
@@ -363,6 +365,7 @@ int main(void) {
 				spellVec[i].draw(window);
 				spellVec[i].shoot(1);					
 			}
+			
 			break;
 		case 3:
 			window.clear(sf::Color::Black);
@@ -388,10 +391,11 @@ int main(void) {
 			game.tutorial(window, isFullscreen);
 			break;
 		}
+		
 		window.display();
 		
 	}
-
+	
 	return 0;
 }
 
