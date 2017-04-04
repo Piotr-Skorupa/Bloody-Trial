@@ -17,17 +17,6 @@
 #include "Stats.h"
 #include "Zombie.h"
 
-void thread_func1(Zombie &z, int &kierunek_z, int &zombieAlive) {
-	while (zombieAlive != 0 ) {
-		kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
-		if (kierunek_z == 1) z.moveLeft();
-		if (kierunek_z == 2) z.moveRight();
-		if (kierunek_z == 3) z.moveUp();
-		if (kierunek_z == 4) z.moveDown();
-		sf::sleep(sf::milliseconds(100));
-	}
-}
-
 
 int main(void) {
 	
@@ -41,10 +30,10 @@ int main(void) {
 	bool isAttack_possible = false;
 	float m;
 	int kierunek_z;
+	int popelina = 3;
 	sf::Time time;
 	std::thread zombie_thread[zombie_counter];
 		
-	
 	//WINDOW
 	sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
 	sf::RenderWindow window(sf::VideoMode(1366, 768), "Bloody Trial v0.1", sf::Style::Default);
@@ -70,7 +59,8 @@ int main(void) {
 	Options options;
 	Hero heros;
 	Zombie z[zombie_counter];
-		
+
+			
 	float mana = heros.stan_many();
 	float mana_max = heros.getManaMax();
 	std::vector<Spell1> spellVec;
@@ -123,6 +113,16 @@ int main(void) {
 	if (!krzyk.loadFromFile("src/scream.wav"))
 		return -1; // error
 	scream.setBuffer(krzyk);
+
+	/*
+	for (int i = 0; i < zombie_counter; i++) {
+		zombie_thread[i] = std::thread(&Zombie::move, z[i]);
+
+	}
+	for (int i = 0; i < zombie_counter; i++) {
+		zombie_thread[i].join();
+	}
+	*/
 
 	//MAIN LOOP
 	while (window.isOpen())
@@ -283,17 +283,7 @@ int main(void) {
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
 			m = (mana / mana_max) * 100;
-			//proba watku
-			/*
-			for (int i = 0; i < zombie_counter; i++) {
-				zombie_thread[i] = std::thread(&thread_func1, std::ref(z[i]), std::ref(kierunek_z), std::ref(zombie_counter));
-				
-			}
-			for (int i = 0; i < zombie_counter; i++) {
-				zombie_thread[i].join();
-			}
-			*/
-			
+						
 
 			if (m > 90) game.mana.setTexture(game.czar);
 			else if (90 > m && m > 60)  game.mana.setTexture(game.czar075);
@@ -313,19 +303,6 @@ int main(void) {
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
 			
-
-			//poruszanie sie zombie
-			/*
-			for (int i = 0; i < zombie_counter ; i++) {
-				kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
-				if (kierunek_z == 1) z[i].moveLeft();
-				if (kierunek_z == 2) z[i].moveRight();
-				if (kierunek_z == 3) z[i].moveUp();
-				if (kierunek_z == 4) z[i].moveDown();
-				z[i].draw(window);
-								
-			}*/
-
 			// kolizja gracza z zombie (czy moga zaatakowac ? )
 			for (int i = 0; i < zombie_counter; i++) {
 				if (abs(heros.hero.getPosition().x - z[i].zombi.getPosition().x) < 90 && abs(heros.hero.getPosition().y - z[i].zombi.getPosition().y) < 90 && z[i].isDead == false) {

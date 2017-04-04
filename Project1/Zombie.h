@@ -15,6 +15,7 @@ private:
 public:
 	int x;
 	int y;
+	int kierunek_z;
 	bool isMoving;
 	bool isDead;
 	sf::Texture trup;
@@ -26,9 +27,7 @@ public:
 	void draw(sf::RenderWindow &window);
 	void take_dmg(int a);
 	int attack();
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
+	void move();
+	
 };
 

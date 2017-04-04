@@ -37,90 +37,98 @@ int Zombie::attack() {
 	return _dmg;
 }
 
-void Zombie::moveLeft() {
-	if (isMoving == true) {
-		if (zombi.getPosition().x > 200) {
-			int bb = 1 + (std::rand() % (3 - 1 + 1));
-			if (isMoving == true && bb == 1) {
-				zombi.move(-5, 0);
-			}
-			if (isMoving == true && bb == 2) {
-				zombi.move(-5, 0);
-				zombi.move(-5, 0);
+void Zombie::move() {
+	
+	while (isMoving == true)
+	{
+		if (isMoving == true) {
+			kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
+			//lewo
+			if (kierunek_z == 1) {
+				if (zombi.getPosition().x > 200) {
+					int bb = 1 + (std::rand() % (3 - 1 + 1));
+					if (isMoving == true && bb == 1) {
+						zombi.move(-5, 0);
+					}
+					if (isMoving == true && bb == 2) {
+						zombi.move(-5, 0);
+						zombi.move(-5, 0);
 
+					}
+					if (isMoving == true && bb == 3) {
+						zombi.move(-5, 0);
+						zombi.move(-5, 0);
+						zombi.move(-5, 0);
+					}
+				}
+				else kierunek_z = 2;
 			}
-			if (isMoving == true && bb == 3) {
-				zombi.move(-5, 0);
-				zombi.move(-5, 0);
-				zombi.move(-5, 0);
+
+			//prawo
+			if (kierunek_z == 2) {
+				if (zombi.getPosition().x < 4700) {
+					int bb = 1 + (std::rand() % (3 - 1 + 1));
+					if (isMoving == true && bb == 1) {
+						zombi.move(5, 0);
+					}
+					if (isMoving == true && bb == 2) {
+						zombi.move(5, 0);
+						zombi.move(5, 0);
+
+					}
+					if (isMoving == true && bb == 3) {
+						zombi.move(5, 0);
+						zombi.move(5, 0);
+						zombi.move(5, 0);
+					}
+				}
+				else kierunek_z = 1;
+			}
+			//gora	
+			if (kierunek_z == 3) {
+				if (zombi.getPosition().y > 100) {
+					int bb = 1 + (std::rand() % (3 - 1 + 1));
+					if (isMoving == true && bb == 1) {
+						zombi.move(0, -5);
+					}
+					if (isMoving == true && bb == 2) {
+						zombi.move(0, -5);
+						zombi.move(0, -5);
+
+					}
+					if (isMoving == true && bb == 3) {
+						zombi.move(0, -5);
+						zombi.move(0, -5);
+						zombi.move(0, -5);
+					}
+				}
+				else kierunek_z = 4;
+			}
+			//dol	
+			if (kierunek_z == 4) {
+				if (zombi.getPosition().y < 1880) {
+					int bb = 1 + (std::rand() % (3 - 1 + 1));
+					if (isMoving == true && bb == 1) {
+						zombi.move(0, 5);
+					}
+					if (isMoving == true && bb == 2) {
+						zombi.move(0, 5);
+						zombi.move(0, 5);
+
+					}
+					if (isMoving == true && bb == 3) {
+						zombi.move(0, 5);
+						zombi.move(0, 5);
+						zombi.move(0, 5);
+					}
+				}
+				else kierunek_z = 3;
 			}
 		}
-		else moveRight();
 	}
+	
 }
-void Zombie::moveRight() {
-	if (isMoving == true) {
-		if (zombi.getPosition().x < 4700) {
-			int bb = 1 + (std::rand() % (3 - 1 + 1));
-			if (isMoving == true && bb == 1) {
-				zombi.move(5, 0);
-			}
-			if (isMoving == true && bb == 2) {
-				zombi.move(5, 0);
-				zombi.move(5, 0);
-
-			}
-			if (isMoving == true && bb == 3) {
-				zombi.move(5, 0);
-				zombi.move(5, 0);
-				zombi.move(5, 0);
-			}
-		}
-		else moveLeft();
-	}
-}
-void Zombie::moveUp() {
-	if (isMoving == true) {
-		if (zombi.getPosition().y > 100) {
-			int bb = 1 + (std::rand() % (3 - 1 + 1));
-			if (isMoving == true && bb == 1) {
-				zombi.move(0, -5);
-			}
-			if (isMoving == true && bb == 2) {
-				zombi.move(0, -5);
-				zombi.move(0, -5);
-
-			}
-			if (isMoving == true && bb == 3) {
-				zombi.move(0, -5);
-				zombi.move(0, -5);
-				zombi.move(0, -5);
-			}
-		}
-		else moveDown();
-	}
-}
-void Zombie::moveDown() {
-	if (isMoving == true) {
-		if (zombi.getPosition().y < 1880) {
-			int bb = 1 + (std::rand() % (3 - 1 + 1));
-			if (isMoving == true && bb == 1) {
-				zombi.move(0, 5);
-			}
-			if (isMoving == true && bb == 2) {
-				zombi.move(0, 5);
-				zombi.move(0, 5);
-
-			}
-			if (isMoving == true && bb == 3) {
-				zombi.move(0, 5);
-				zombi.move(0, 5);
-				zombi.move(0, 5);
-			}
-		}
-		else moveUp();
-	}
-}
+		
 
 Zombie::~Zombie()
 {
