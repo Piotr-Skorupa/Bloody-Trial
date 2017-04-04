@@ -25,15 +25,17 @@ public:
 	sf::Texture trup;
 	sf::Sprite zombi;
 	sf::Texture dead;
+	int hajs;
 	
 	Zombie();
 	~Zombie();
 	void draw(sf::RenderWindow &window);
-	void take_dmg(int a);
+	void take_dmg(int a, int &b);
 	int attack();
 	void move();
 	void makethread();
 	std::string hptext();
+	int get_money();
 	
 };
 

@@ -32,9 +32,8 @@ int main(void) {
 	bool isAttack_possible = false;
 	float m;
 	int kierunek_z;
-	int popelina = 3;
-	sf::Time time;
 	
+		
 		
 	//WINDOW
 	sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
@@ -278,9 +277,10 @@ int main(void) {
 					
 				}
 				else if (isAttack_possible == true) {
-					z[nrAtakowanego].take_dmg(heros.attack());
+					z[nrAtakowanego].take_dmg(heros.attack(), heros.money);
 					attack_cel.play();
 					isAttack_possible = false;
+
 					}
 				}
 
@@ -372,7 +372,7 @@ int main(void) {
 					spellVec[i].shoot(1);
 					for (int j = 0; j < zombie_counter; j++) {
 						if (abs(spellVec[i].bolt.getPosition().x - z[j].zombi.getPosition().x) < 80 && abs(spellVec[i].bolt.getPosition().y - z[j].zombi.getPosition().y) < 80 && z[j].isDead == false) {
-							z[j].take_dmg(spellVec[i].dmg);
+							z[j].take_dmg(spellVec[i].dmg, heros.money);
 							spellVec[i].isShooted = true;
 						}
 					}
