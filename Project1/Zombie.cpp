@@ -45,6 +45,7 @@ void Zombie::move() {
 	
 	while (isMoving == true)
 	{
+		
 		if (isMoving == true) {
 			kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
 			//lewo
@@ -53,18 +54,18 @@ void Zombie::move() {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(-3, 0);
+							zombi.move(-4, 0);
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(-3, 0);
+							zombi.move(-4, 0);
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(-3, 0);
+							zombi.move(-4, 0);
 						}
 					}
 				}
@@ -77,18 +78,18 @@ void Zombie::move() {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(3, 0);
+							zombi.move(4, 0);
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(3, 0);
+							zombi.move(4, 0);
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(3, 0);
+							zombi.move(4, 0);
 						}
 					}
 				}
@@ -100,18 +101,18 @@ void Zombie::move() {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(0, -3);
+							zombi.move(0, -4);
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(0, -3);
+							zombi.move(0, -4);
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(0, -3);
+							zombi.move(0, -4);
 						}
 					}
 				}
@@ -123,18 +124,18 @@ void Zombie::move() {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(0, 3);
+							zombi.move(0, 4);
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(0, 3);
+							zombi.move(0, 4);
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(0, 3);
+							zombi.move(0, 4);
 						}
 					}
 				}

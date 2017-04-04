@@ -18,7 +18,9 @@
 #include "Zombie.h"
 
 
+
 int main(void) {
+	
 	
 	//zmienne
 	const int zombie_counter = 20;
@@ -119,13 +121,11 @@ int main(void) {
 	sf::Text enemyHP;
 	enemyHP.setFont(font);
 	enemyHP.setCharacterSize(25);
-	//enemyHP.setColor(sf::Color::Red);
-	std::string enemySTR;
-	std::string poltextu;
-
+	
 	//thready
 	for (int i=0; i < zombie_counter; i++) {
 		z[i].makethread();
+		sf::sleep(sf::milliseconds(100));
 	}
 	//MAIN LOOP
 	while (window.isOpen())
@@ -137,6 +137,10 @@ int main(void) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 				isGamerunning = false;
+				for (int i = 0; i < zombie_counter; i++) {
+					z[i].isDead = true;
+					z[i].isMoving = false;
+				}
 			}
 			//pozycja myszki
 			sf::Vector2i& position = sf::Mouse::getPosition(window);
@@ -172,6 +176,10 @@ int main(void) {
 					window.close();
 					isGamerunning = false;
 					click.play();
+					for (int i = 0; i < zombie_counter; i++) {
+						z[i].isDead = true;
+						z[i].isMoving = false;
+					}
 				}
 			}
 			//Are you sure ? (2) new game
@@ -212,6 +220,10 @@ int main(void) {
 				gamemusic.play();
 				heros.newgame();
 				isFiring = false;
+				for (int i = 0; i < zombie_counter; i++) {
+					z[i].isDead = false;
+					z[i].isMoving = true;
+				}
 				
 				
 			}
@@ -242,6 +254,7 @@ int main(void) {
 				stan_okna = 0;
 				gamemusic.pause();
 				sound.play();
+				
 			}
 			//HERO MOVING
 			if (stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
@@ -322,10 +335,16 @@ int main(void) {
 				}
 				
 			}
-			
+			for (int i = 0; i < zombie_counter; i++) {
+				if (z[i].isDead == false) {
+					z[i].zombi.setTexture(z[i].trup);
+				}
+			}
+
 			for (int i = 0; i < zombie_counter; i++) {
 				z[i].draw(window);
 			}
+			
 			game.draw(window);
 			window.draw(heros.zyc);
 			window.draw(heros.man);
