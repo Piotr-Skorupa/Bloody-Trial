@@ -32,7 +32,7 @@ int main(void) {
 	int kierunek_z;
 	int popelina = 3;
 	sf::Time time;
-	std::thread zombie_thread[zombie_counter];
+	
 		
 	//WINDOW
 	sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
@@ -114,16 +114,10 @@ int main(void) {
 		return -1; // error
 	scream.setBuffer(krzyk);
 
-	/*
-	for (int i = 0; i < zombie_counter; i++) {
-		zombie_thread[i] = std::thread(&Zombie::move, z[i]);
-
+	//thready
+	for (int i=0; i < zombie_counter; i++) {
+		z[i].makethread();
 	}
-	for (int i = 0; i < zombie_counter; i++) {
-		zombie_thread[i].join();
-	}
-	*/
-
 	//MAIN LOOP
 	while (window.isOpen())
 	{
@@ -210,6 +204,7 @@ int main(void) {
 				gamemusic.play();
 				heros.newgame();
 				isFiring = false;
+				
 				
 			}
 			//continue game
@@ -302,6 +297,7 @@ int main(void) {
 			game.level.setPosition(heros.x - 650, heros.y + 390);
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
+			
 			
 			// kolizja gracza z zombie (czy moga zaatakowac ? )
 			for (int i = 0; i < zombie_counter; i++) {

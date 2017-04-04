@@ -3,13 +3,15 @@
 #include <SFML/Audio.hpp>
 #include <random>
 #include <ctime>
+#include <iostream>
+#include <thread>
 
 class Zombie
 {
 private:
 	int _hp;
 	int _dmg;
-	
+	std::thread z_thread;
 	
 
 public:
@@ -28,6 +30,7 @@ public:
 	void take_dmg(int a);
 	int attack();
 	void move();
+	void makethread();
 	
 };
 

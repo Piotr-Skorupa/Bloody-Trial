@@ -48,17 +48,20 @@ void Zombie::move() {
 				if (zombi.getPosition().x > 200) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
-						zombi.move(-5, 0);
+						for (int i = 0; i < 5; i++) {
+							zombi.move(-3, 0);
+						}
 					}
 					if (isMoving == true && bb == 2) {
-						zombi.move(-5, 0);
-						zombi.move(-5, 0);
+						for (int i = 0; i < 10; i++) {
+							zombi.move(-3, 0);
+						}
 
 					}
 					if (isMoving == true && bb == 3) {
-						zombi.move(-5, 0);
-						zombi.move(-5, 0);
-						zombi.move(-5, 0);
+						for (int i = 0; i < 15; i++) {
+							zombi.move(-3, 0);
+						}
 					}
 				}
 				else kierunek_z = 2;
@@ -69,17 +72,20 @@ void Zombie::move() {
 				if (zombi.getPosition().x < 4700) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
-						zombi.move(5, 0);
+						for (int i = 0; i < 5; i++) {
+							zombi.move(3, 0);
+						}
 					}
 					if (isMoving == true && bb == 2) {
-						zombi.move(5, 0);
-						zombi.move(5, 0);
+						for (int i = 0; i < 10; i++) {
+							zombi.move(3, 0);
+						}
 
 					}
 					if (isMoving == true && bb == 3) {
-						zombi.move(5, 0);
-						zombi.move(5, 0);
-						zombi.move(5, 0);
+						for (int i = 0; i < 15; i++) {
+							zombi.move(3, 0);
+						}
 					}
 				}
 				else kierunek_z = 1;
@@ -89,17 +95,20 @@ void Zombie::move() {
 				if (zombi.getPosition().y > 100) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
-						zombi.move(0, -5);
+						for (int i = 0; i < 5; i++) {
+							zombi.move(0, -3);
+						}
 					}
 					if (isMoving == true && bb == 2) {
-						zombi.move(0, -5);
-						zombi.move(0, -5);
+						for (int i = 0; i < 10; i++) {
+							zombi.move(0, -3);
+						}
 
 					}
 					if (isMoving == true && bb == 3) {
-						zombi.move(0, -5);
-						zombi.move(0, -5);
-						zombi.move(0, -5);
+						for (int i = 0; i < 15; i++) {
+							zombi.move(0, -3);
+						}
 					}
 				}
 				else kierunek_z = 4;
@@ -109,27 +118,36 @@ void Zombie::move() {
 				if (zombi.getPosition().y < 1880) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
-						zombi.move(0, 5);
+						for (int i = 0; i < 5; i++) {
+							zombi.move(0, 3);
+						}
 					}
 					if (isMoving == true && bb == 2) {
-						zombi.move(0, 5);
-						zombi.move(0, 5);
+						for (int i = 0; i < 10; i++) {
+							zombi.move(0, 3);
+						}
 
 					}
 					if (isMoving == true && bb == 3) {
-						zombi.move(0, 5);
-						zombi.move(0, 5);
-						zombi.move(0, 5);
+						for (int i = 0; i < 15; i++) {
+							zombi.move(0, 3);
+						}
 					}
 				}
 				else kierunek_z = 3;
 			}
 		}
+		sf::sleep(sf::milliseconds(200));
 	}
 	
+	
 }
-		
+
+void Zombie::makethread() {
+	z_thread = std::thread(&Zombie::move, this);
+}
 
 Zombie::~Zombie()
 {
+	z_thread.join();
 }
