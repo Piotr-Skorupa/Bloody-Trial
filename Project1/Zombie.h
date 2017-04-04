@@ -12,9 +12,11 @@ private:
 	int _hp;
 	int _dmg;
 	std::thread z_thread;
-	
+	std::thread atak_thread;
 
 public:
+	sf::SoundBuffer pain;
+	sf::Sound getHit;
 	int x;
 	int y;
 	int kierunek_z;
@@ -31,6 +33,7 @@ public:
 	int attack();
 	void move();
 	void makethread();
+	std::string hptext();
 	
 };
 

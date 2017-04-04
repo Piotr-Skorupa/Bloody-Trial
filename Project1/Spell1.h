@@ -8,11 +8,14 @@ public:
 	
 	int dmg;
 	int cost; // mana lost
-	bool spell_left = false;
-	bool spell_right = false;
-	bool spell_up = false;
-	bool spell_down = false;
-	
+	bool spell_left;
+	bool spell_right;
+	bool spell_up;
+	bool spell_down;
+	bool isShooted;
+	sf::Texture fire;
+	sf::Sprite bolt;
+
 	Spell1();
 	~Spell1();
 	void setTex();
@@ -20,8 +23,7 @@ public:
 	void shoot(int speed);
 	void draw(sf::RenderWindow &window);
 	
-private:
-	sf::Texture fire;
-	sf::Sprite bolt;
+
+	
 };
 

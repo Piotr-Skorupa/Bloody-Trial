@@ -6,6 +6,11 @@ Spell1::Spell1()
 {
 	dmg = 15;
 	cost = 10;
+	spell_left = false;
+	spell_right = false;
+	spell_up = false;
+	spell_down = false;
+	isShooted = false;
 	fire.loadFromFile("src/fire.png");
 	bolt.setTexture(fire);
 

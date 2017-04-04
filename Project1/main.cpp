@@ -113,6 +113,15 @@ int main(void) {
 	if (!krzyk.loadFromFile("src/scream.wav"))
 		return -1; // error
 	scream.setBuffer(krzyk);
+	// texty
+	sf::Font font;
+	font.loadFromFile("src/Oswald-Stencil.ttf");
+	sf::Text enemyHP;
+	enemyHP.setFont(font);
+	enemyHP.setCharacterSize(25);
+	//enemyHP.setColor(sf::Color::Red);
+	std::string enemySTR;
+	std::string poltextu;
 
 	//thready
 	for (int i=0; i < zombie_counter; i++) {
@@ -199,7 +208,6 @@ int main(void) {
 			}
 			//Tutorial
 			if (stan_okna == 5 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
-				scream.play();
 				stan_okna = 2;
 				gamemusic.play();
 				heros.newgame();
@@ -252,7 +260,10 @@ int main(void) {
 				isFiring = true;
 				}
 			if (stan_okna == 2  && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-				if (isAttack_possible == false) { attack_air.play(); }
+				if (isAttack_possible == false) {
+					attack_air.play();
+					
+				}
 				else if (isAttack_possible == true) {
 					z[nrAtakowanego].take_dmg(heros.attack());
 					attack_cel.play();
@@ -297,6 +308,7 @@ int main(void) {
 			game.level.setPosition(heros.x - 650, heros.y + 390);
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
+			enemyHP.setPosition(heros.x, heros.y - 500);
 			
 			
 			// kolizja gracza z zombie (czy moga zaatakowac ? )
@@ -305,6 +317,7 @@ int main(void) {
 					heros.take_dmg(z[i].attack());
 					isAttack_possible = true;
 					nrAtakowanego = i;
+					enemyHP.setString("enemy hp: " + z[i].hptext());
 
 				}
 				
@@ -317,6 +330,7 @@ int main(void) {
 			window.draw(heros.zyc);
 			window.draw(heros.man);
 			window.draw(heros.hero);
+			window.draw(enemyHP);
 			if (isFiring == true && mana > 9 ) {
 				Spell1 newSpell;
 				newSpell.setPos(heros.x + 25, heros.y - 25);
@@ -333,12 +347,20 @@ int main(void) {
 			else isFiring = false;
 						
 			for (int i = 0; i < spellVec.size(); i++) {
-				
-				spellVec[i].setTex();
-				spellVec[i].draw(window);
-				spellVec[i].shoot(1);					
+				if (spellVec[i].isShooted == false) {
+					spellVec[i].setTex();
+					spellVec[i].draw(window);
+					spellVec[i].shoot(1);
+					for (int j = 0; j < zombie_counter; j++) {
+						if (abs(spellVec[i].bolt.getPosition().x - z[j].zombi.getPosition().x) < 80 && abs(spellVec[i].bolt.getPosition().y - z[j].zombi.getPosition().y) < 80 && z[j].isDead == false) {
+							z[j].take_dmg(spellVec[i].dmg);
+							spellVec[i].isShooted = true;
+						}
+					}
+					
+				}
 			}
-			
+			enemyHP.setString("");
 			break;
 		case 3:
 			window.clear(sf::Color::Black);

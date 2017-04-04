@@ -15,6 +15,9 @@ Zombie::Zombie()
 	dead.loadFromFile("src/zombie_trup.png");
 	zombi.setTexture(trup);
 	zombi.setPosition(x, y);
+	pain.loadFromFile("src/zombie_pain.wav");
+	getHit.setBuffer(pain);
+	
 
 }
 
@@ -26,6 +29,7 @@ void Zombie::draw(sf::RenderWindow &window) {
 
 void Zombie::take_dmg(int a) {
 	_hp -= a;
+	getHit.play();
 	if (_hp <= 0) {
 		isDead = true;
 		isMoving = false;
@@ -145,6 +149,10 @@ void Zombie::move() {
 
 void Zombie::makethread() {
 	z_thread = std::thread(&Zombie::move, this);
+}
+
+std::string Zombie::hptext() {
+	return std::to_string(_hp);
 }
 
 Zombie::~Zombie()
