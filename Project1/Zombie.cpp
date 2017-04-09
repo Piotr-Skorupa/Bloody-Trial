@@ -17,8 +17,18 @@ Zombie::Zombie()
 	zombi.setPosition(x, y);
 	pain.loadFromFile("src/zombie_pain.wav");
 	getHit.setBuffer(pain);
+	atakasz.loadFromFile("src/bite.wav");
+	bite.setBuffer(atakasz);
 	
 
+}
+
+void Zombie::newgame() {
+	_hp = 30;
+	x = 500 + (std::rand() % (3500 - 500 + 1));
+	y = 600 + (std::rand() % (1850 - 600 + 1));
+	isMoving = true;
+	isDead = false;
 }
 
 
@@ -38,8 +48,15 @@ void Zombie::take_dmg(int a, int &b) {
 	}
 }
 
-int Zombie::attack() {
-	return _dmg;
+void Zombie::attack(Hero &a, bool &x) {
+	while (isMoving == true ) {
+		if (x == true) {
+			a.take_dmga(_dmg);
+			bite.play();
+			std::cout << "atakuje" << std::endl;
+			sf::sleep(sf::milliseconds(1000));
+		}
+	}
 }
 
 int Zombie::get_money() {
@@ -180,6 +197,8 @@ void Zombie::move() {
 
 void Zombie::makethread() {
 	z_thread = std::thread(&Zombie::move, this);
+	
+	
 }
 
 std::string Zombie::hptext() {
@@ -189,4 +208,5 @@ std::string Zombie::hptext() {
 Zombie::~Zombie()
 {
 	z_thread.join();
+	atak_thread.join();
 }

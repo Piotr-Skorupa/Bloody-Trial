@@ -17,6 +17,20 @@
 #include "Stats.h"
 #include "Zombie.h"
 
+void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite) {
+	while (1) {
+		for (int i = 0; i < 20;i++) {
+			if (x == true && z[i].isMoving == true) {
+				h.take_dmga(z[i]._dmg);
+				bite.play();
+				std::cout << "atakuje" << std::endl;
+				x = false;
+				sf::sleep(sf::milliseconds(1000));
+			}
+		}
+	}
+}
+
 
 
 int main(void) {
@@ -24,6 +38,7 @@ int main(void) {
 	
 	//zmienne
 	const int zombie_counter = 20;
+	int liczba_zombie;
 	int nrAtakowanego = 0;
 	int stan_okna = 0;
 	bool isFullscreen = false;
@@ -32,6 +47,7 @@ int main(void) {
 	bool isAttack_possible = false;
 	float m;
 	int kierunek_z;
+	std::thread atak_trupow;
 	
 		
 		
@@ -121,11 +137,18 @@ int main(void) {
 	enemyHP.setFont(font);
 	enemyHP.setCharacterSize(25);
 	
+	
 	//thready
-	for (int i=0; i < zombie_counter; i++) {
+
+	for (int i = 0; i < zombie_counter; i++) {
 		z[i].makethread();
+		//z[i].atak_thread = std::thread(&Zombie::attack, &z[i] , std::ref(heros), std::ref(isAttack_possible));
 		sf::sleep(sf::milliseconds(100));
 	}
+	//attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite)
+	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite));
+	
+
 	//MAIN LOOP
 	while (window.isOpen())
 	{
@@ -158,6 +181,10 @@ int main(void) {
 			if (isGamerunning == false && sf::Mouse::isButtonPressed(sf::Mouse::Left) && position.x > 600 && position.y > 600 && position.x <738 && position.y <648 && stan_okna == 0) {
 				if (stan_okna == 0)	window.close();
 				isGamerunning = false;
+				for (int i = 0; i < zombie_counter; i++) {
+					z[i].isDead = true;
+					z[i].isMoving = false;
+				}
 				click.play();
 
 			}
@@ -220,9 +247,9 @@ int main(void) {
 				heros.newgame();
 				isFiring = false;
 				for (int i = 0; i < zombie_counter; i++) {
-					z[i].isDead = false;
-					z[i].isMoving = true;
+					z[i].newgame();
 				}
+				
 				
 				
 			}
@@ -327,7 +354,6 @@ int main(void) {
 			// kolizja gracza z zombie (czy moga zaatakowac ? )
 			for (int i = 0; i < zombie_counter; i++) {
 				if (abs(heros.hero.getPosition().x - z[i].zombi.getPosition().x) < 90 && abs(heros.hero.getPosition().y - z[i].zombi.getPosition().y) < 90 && z[i].isDead == false) {
-					heros.take_dmg(z[i].attack());
 					isAttack_possible = true;
 					nrAtakowanego = i;
 					enemyHP.setString("enemy hp: " + z[i].hptext());
@@ -409,7 +435,7 @@ int main(void) {
 		window.display();
 		
 	}
-	
+	atak_trupow.join();
 	return 0;
 }
 

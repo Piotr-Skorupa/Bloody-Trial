@@ -5,20 +5,25 @@
 #include <ctime>
 #include <iostream>
 #include <thread>
+#include "Hero.h"
 
 class Zombie
 {
 private:
 	int _hp;
-	int _dmg;
+	
 	std::thread z_thread;
-	std::thread atak_thread;
+	
 
 public:
+	std::thread atak_thread;
 	sf::SoundBuffer pain;
 	sf::Sound getHit;
+	sf::SoundBuffer atakasz;
+	sf::Sound bite;
 	int x;
 	int y;
+	int _dmg;
 	int kierunek_z;
 	bool isMoving;
 	bool isDead;
@@ -31,11 +36,12 @@ public:
 	~Zombie();
 	void draw(sf::RenderWindow &window);
 	void take_dmg(int a, int &b);
-	int attack();
+	void attack(Hero &a, bool &x);
 	void move();
 	void makethread();
 	std::string hptext();
 	int get_money();
+	void newgame();
 	
 };
 

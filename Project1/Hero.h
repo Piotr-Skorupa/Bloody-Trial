@@ -2,9 +2,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+
 class Hero
 {
 public:
+	
+
+
+
 	Hero();
 	~Hero();
 	void moveLeft();
@@ -18,7 +23,7 @@ public:
 	int getManaMax();
 	void newgame();
 	int attack();
-	void take_dmg(int a);
+	void take_dmga(int a);
 	
 	int potki_zycia;
 	int potki_many;

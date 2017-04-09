@@ -40,7 +40,7 @@ int Hero::attack() {
 	return damage1 + (std::rand() % (damage2 - damage1 + 1));
 }
 
-void Hero::take_dmg(int a) {
+void Hero::take_dmga(int a) {
 	life -= a;
 }
 
