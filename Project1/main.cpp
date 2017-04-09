@@ -325,7 +325,10 @@ int main(void) {
 			if (stan_okna == 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 				stan_okna = 2;
 			}
-			
+			//fontanna
+			if (hero_life != hero_lifemax && heros.x > 20 && heros.x < 140 && heros.y < 500 && heros.y > 400 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
+				heros.full_health();
+			}
 
 		}
 

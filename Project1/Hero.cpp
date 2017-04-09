@@ -173,3 +173,10 @@ void Hero::newgame() {
 	nr_broni = 0;
 
 }
+
+void Hero::full_health() {
+	if (money > 150) {
+		life = life_max;
+		money -= 150;
+	}
+}

@@ -43,6 +43,7 @@ public:
 	void newgame();
 	int attack();
 	void take_dmga(int a, int &stan);
+	void full_health();
 	
 	
 
