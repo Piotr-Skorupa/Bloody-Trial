@@ -6,8 +6,25 @@
 class Hero
 {
 public:
+	int potki_zycia;
+	int potki_many;
+	int money;
+	int nr_broni;
+	bool isMoving;
+	bool up;
+	bool down;
+	bool left;
+	bool right;
+	int x;
+	int y;
+	sf::Texture ziomek;
+	sf::Sprite hero;
+	sf::Font font;
+	sf::Text zyc;
+	sf::Text man;
+	sf::SoundBuffer krzyk;
+	sf::Sound scream;
 	
-
 
 
 	Hero();
@@ -21,26 +38,13 @@ public:
 	void stratamany(int x);
 	int stan_many();
 	int getManaMax();
+	int stan_zycia();
+	int getLifeMax();
 	void newgame();
 	int attack();
-	void take_dmga(int a);
+	void take_dmga(int a, int &stan);
 	
-	int potki_zycia;
-	int potki_many;
-	int money;
-	int nr_broni;
-	bool isMoving;
-	bool up;
-	bool down;
-	bool left; 
-	bool right;
-	int x;
-	int y;
-	sf::Texture ziomek;
-	sf::Sprite hero;
-	sf::Font font;
-	sf::Text zyc;
-	sf::Text man;
+	
 
 private:
 	int level;

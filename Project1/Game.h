@@ -10,6 +10,10 @@ public:
 	sf::Sprite tutorial1;
 	sf::Sprite tutorial2;
 	sf::Texture zycie;
+	sf::Texture zycie075;
+	sf::Texture zycie05;
+	sf::Texture zycie025;
+	sf::Texture zycie0;
 	sf::Sprite life;
 	sf::Texture czar;
 	sf::Texture czar075;

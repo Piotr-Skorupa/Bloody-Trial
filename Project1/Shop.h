@@ -3,10 +3,10 @@
 #include <SFML/Audio.hpp>
 #include "Hero.h"
 
-class Stats
+class Shop
 {
 public:
-	Stats();
-	~Stats();
+	Shop();
+	~Shop();
 };
 

@@ -51,7 +51,7 @@ void Zombie::take_dmg(int a, int &b) {
 void Zombie::attack(Hero &a, bool &x) {
 	while (isMoving == true ) {
 		if (x == true) {
-			a.take_dmga(_dmg);
+			//a.take_dmga(_dmg);
 			bite.play();
 			std::cout << "atakuje" << std::endl;
 			sf::sleep(sf::milliseconds(1000));
@@ -76,9 +76,9 @@ int Zombie::get_money() {
 	
 }
 
-void Zombie::move() {
+void Zombie::move(bool g) {
 	
-	while (isMoving == true)
+	while (g == true)
 	{
 		
 		if (isMoving == true) {
@@ -195,8 +195,8 @@ void Zombie::move() {
 	
 }
 
-void Zombie::makethread() {
-	z_thread = std::thread(&Zombie::move, this);
+void Zombie::makethread(bool g) {
+	z_thread = std::thread(&Zombie::move, this, g);
 	
 	
 }
@@ -208,5 +208,5 @@ std::string Zombie::hptext() {
 Zombie::~Zombie()
 {
 	z_thread.join();
-	atak_thread.join();
+	
 }

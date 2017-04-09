@@ -32,6 +32,9 @@ Hero::Hero()
 	man.setFont(font);
 	zyc.setCharacterSize(20);
 	man.setCharacterSize(20);
+	
+	krzyk.loadFromFile("src/scream.wav");
+	scream.setBuffer(krzyk);
 
 
 }
@@ -40,8 +43,12 @@ int Hero::attack() {
 	return damage1 + (std::rand() % (damage2 - damage1 + 1));
 }
 
-void Hero::take_dmga(int a) {
+void Hero::take_dmga(int a, int &stan) {
 	life -= a;
+	if (life <= 0) {
+		stan = 6;
+		scream.play();
+	}
 }
 
 Hero::~Hero()
@@ -133,6 +140,14 @@ int Hero::stan_many() {
 
 int Hero::getManaMax() {
 	return mana_max;
+}
+
+int Hero::stan_zycia() {
+	return life;
+}
+
+int Hero::getLifeMax() {
+	return life_max;
 }
 
 void Hero::newgame() {

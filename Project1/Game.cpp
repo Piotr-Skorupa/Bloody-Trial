@@ -12,6 +12,10 @@ Game::Game()
 	tutorial1.setPosition(0, 0);
 	tutorial2.setPosition(0, 0);
 	zycie.loadFromFile("src/zycie.png");
+	zycie075.loadFromFile("src/zycie075.png");
+	zycie05.loadFromFile("src/zycie05.png");
+	zycie025.loadFromFile("src/zycie025.png");
+	zycie0.loadFromFile("src/zycie0.png");
 	czar.loadFromFile("src/mana.png");
 	czar075.loadFromFile("src/mana075.png");
 	czar05.loadFromFile("src/mana05.png");

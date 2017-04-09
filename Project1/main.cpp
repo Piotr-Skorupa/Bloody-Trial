@@ -14,14 +14,14 @@
 #include "Game.h"
 #include "Hero.h"
 #include "Spell1.h"
-#include "Stats.h"
+#include "Shop.h"
 #include "Zombie.h"
 
-void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite) {
-	while (1) {
+void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan) {
+	while (g) {
 		for (int i = 0; i < 20;i++) {
 			if (x == true && z[i].isMoving == true) {
-				h.take_dmga(z[i]._dmg);
+				h.take_dmga(z[i]._dmg, stan);
 				bite.play();
 				std::cout << "atakuje" << std::endl;
 				x = false;
@@ -46,6 +46,7 @@ int main(void) {
 	bool isFiring = false;
 	bool isAttack_possible = false;
 	float m;
+	float l;
 	int kierunek_z;
 	std::thread atak_trupow;
 	
@@ -70,6 +71,11 @@ int main(void) {
 	map.setTexture(mapa);
 	map.setPosition(0, 0);
 	
+	sf::Texture dead;
+	dead.loadFromFile("src/urdead.png");
+	sf::Sprite death;
+	death.setTexture(dead);
+	death.setPosition(0, 0);
 
 	Menu menu;
 	Game game;
@@ -77,6 +83,8 @@ int main(void) {
 	Hero heros;
 	Zombie z[zombie_counter];
 
+	float hero_life = heros.stan_zycia();
+	float hero_lifemax = heros.getLifeMax();
 			
 	float mana = heros.stan_many();
 	float mana_max = heros.getManaMax();
@@ -125,11 +133,7 @@ int main(void) {
 		return -1; // error
 	click.setBuffer(klik);
 
-	sf::SoundBuffer krzyk;
-	sf::Sound scream;
-	if (!krzyk.loadFromFile("src/scream.wav"))
-		return -1; // error
-	scream.setBuffer(krzyk);
+	
 	// texty
 	sf::Font font;
 	font.loadFromFile("src/Oswald-Stencil.ttf");
@@ -141,12 +145,11 @@ int main(void) {
 	//thready
 
 	for (int i = 0; i < zombie_counter; i++) {
-		z[i].makethread();
-		//z[i].atak_thread = std::thread(&Zombie::attack, &z[i] , std::ref(heros), std::ref(isAttack_possible));
+		z[i].makethread(window.isOpen());
 		sf::sleep(sf::milliseconds(100));
 	}
-	//attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite)
-	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite));
+	
+	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna));
 	
 
 	//MAIN LOOP
@@ -276,9 +279,10 @@ int main(void) {
 				}
 			}
 			//GAME
-			if ((stan_okna == 2 || stan_okna == 5) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+			if ((stan_okna == 2 || stan_okna == 5 || stan_okna == 6) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 				stan_okna = 0;
 				gamemusic.pause();
+				heros.scream.pause();
 				sound.play();
 				
 			}
@@ -310,33 +314,52 @@ int main(void) {
 
 					}
 				}
+			
 
 		}
 
 		window.clear();
 		switch (stan_okna) {
 		case 0:
+			//main menu
 			view = window.getDefaultView();
 			window.setView(window.getDefaultView());
 			menu.draw(window);
 			break;
 		case 1:
+			//options
 			options.draw(window);
 			break;
 		case 2:
+			//Gameplay !!!
 			window.clear();
 			window.draw(map);
+			// mana update
+			
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
+			
 			m = (mana / mana_max) * 100;
-						
-
+			
 			if (m > 90) game.mana.setTexture(game.czar);
 			else if (90 > m && m > 60)  game.mana.setTexture(game.czar075);
 			else if (60 > m && m > 35) game.mana.setTexture(game.czar05);
 			else if (35 > m && m > 10) game.mana.setTexture(game.czar025);
 			else if (m == 0 ) game.mana.setTexture(game.czar0);
-						
+			
+			// life update 
+			hero_life = heros.stan_zycia();
+			hero_lifemax = heros.getLifeMax();
+
+			l = (hero_life / hero_lifemax) * 100;
+
+			if (l > 90) game.life.setTexture(game.zycie);
+			else if (90 > l && l > 60)  game.life.setTexture(game.zycie075);
+			else if (60 > l && l > 35) game.life.setTexture(game.zycie05);
+			else if (35 > l && l > 10) game.life.setTexture(game.zycie025);
+			else if (l < 10) game.life.setTexture(game.zycie0);
+
+			// widoki i update sprite'ow
 			view.setCenter(heros.x, heros.y);
 			window.setView(view);
 			heros.lifetexty();
@@ -408,6 +431,7 @@ int main(void) {
 			enemyHP.setString("");
 			break;
 		case 3:
+			//are you sure?
 			window.clear(sf::Color::Black);
 			if (isFullscreen == false) {
 				text1.setPosition(50, 300);
@@ -418,6 +442,7 @@ int main(void) {
 			window.draw(text1);
 			break;
 		case 4:
+			//are you sure?
 			window.clear(sf::Color::Black);
 			if (isFullscreen == false) {
 				text1.setPosition(50, 300);
@@ -428,7 +453,15 @@ int main(void) {
 			window.draw(text1);
 			break;
 		case 5:
+			//newgame tutorial
 			game.tutorial(window, isFullscreen);
+			break;
+		case 6:
+			//smierc
+			view = window.getDefaultView();
+			window.setView(window.getDefaultView());
+			window.clear();
+			window.draw(death);
 			break;
 		}
 		

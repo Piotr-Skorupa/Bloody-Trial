@@ -16,7 +16,7 @@ private:
 	
 
 public:
-	std::thread atak_thread;
+	
 	sf::SoundBuffer pain;
 	sf::Sound getHit;
 	sf::SoundBuffer atakasz;
@@ -37,8 +37,8 @@ public:
 	void draw(sf::RenderWindow &window);
 	void take_dmg(int a, int &b);
 	void attack(Hero &a, bool &x);
-	void move();
-	void makethread();
+	void move(bool g);
+	void makethread(bool g);
 	std::string hptext();
 	int get_money();
 	void newgame();

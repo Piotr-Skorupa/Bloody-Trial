@@ -134,7 +134,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="Spell1.cpp" />
-    <ClCompile Include="Stats.cpp" />
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +143,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="Spell1.h" />
-    <ClInclude Include="Stats.h" />
+    <ClInclude Include="Shop.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
