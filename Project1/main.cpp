@@ -48,6 +48,9 @@ int main(void) {
 	float m;
 	float l;
 	int kierunek_z;
+	bool inshop = false;
+	
+
 	std::thread atak_trupow;
 	
 		
@@ -80,6 +83,7 @@ int main(void) {
 	Menu menu;
 	Game game;
 	Options options;
+	Shop shop;
 	Hero heros;
 	Zombie z[zombie_counter];
 
@@ -279,7 +283,7 @@ int main(void) {
 				}
 			}
 			//GAME
-			if ((stan_okna == 2 || stan_okna == 5 || stan_okna == 6) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+			if ((stan_okna == 2 || stan_okna == 5 || stan_okna == 6)&& inshop == false && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 				stan_okna = 0;
 				gamemusic.pause();
 				heros.scream.pause();
@@ -314,6 +318,13 @@ int main(void) {
 
 					}
 				}
+			//wejscie do sklepu
+			if (heros.x > 200 && heros.x < 360 && heros.y < 104 && stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
+				stan_okna = 7;
+			}
+			if (stan_okna == 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+				stan_okna = 2;
+			}
 			
 
 		}
@@ -335,7 +346,7 @@ int main(void) {
 			window.clear();
 			window.draw(map);
 			// mana update
-			
+			inshop = false;
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
 			
@@ -384,6 +395,14 @@ int main(void) {
 				}
 				
 			}
+			//shop
+			if (heros.x > 200 && heros.x < 360 && heros.y < 104) {
+				enemyHP.setString("Enter to the Shop");
+			}
+			// fontanna
+			if (heros.x > 20 && heros.x < 140 && heros.y < 500 && heros.y > 400) {
+				enemyHP.setString("Full Health for 150 glod");
+			}
 			for (int i = 0; i < zombie_counter; i++) {
 				if (z[i].isDead == false) {
 					z[i].zombi.setTexture(z[i].trup);
@@ -401,7 +420,7 @@ int main(void) {
 			window.draw(enemyHP);
 			if (isFiring == true && mana > 9 ) {
 				Spell1 newSpell;
-				newSpell.setPos(heros.x + 25, heros.y - 25);
+				newSpell.setPos(heros.x - 25, heros.y - 25);
 				// kierunek czaru
 				if (heros.left == true) newSpell.spell_left = true;
 				if (heros.right == true) newSpell.spell_right = true;
@@ -460,8 +479,17 @@ int main(void) {
 			//smierc
 			view = window.getDefaultView();
 			window.setView(window.getDefaultView());
+			isGamerunning = false;
 			window.clear();
 			window.draw(death);
+			break;
+		case 7:
+			//sklep
+			view = window.getDefaultView();
+			window.setView(window.getDefaultView());
+			window.clear();
+			shop.draw(window);
+			inshop = true;
 			break;
 		}
 		
