@@ -49,6 +49,7 @@ int main(void) {
 	float l;
 	int kierunek_z;
 	bool inshop = false;
+	bool isClicked = false;
 	
 
 	std::thread atak_trupow;
@@ -325,9 +326,19 @@ int main(void) {
 			if (stan_okna == 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 				stan_okna = 2;
 			}
+			//sklep w srodku
+			if (isClicked == false && shop.position < 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+				shop.position += 1;
+				isClicked = true;
+			}
+			if (isClicked == false && shop.position > 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+				shop.position -= 1;
+				isClicked = true;
+			}
 			//fontanna
-			if (hero_life != hero_lifemax && heros.x > 20 && heros.x < 140 && heros.y < 500 && heros.y > 400 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
+			if (isClicked == false && hero_life != hero_lifemax && heros.x > 20 && heros.x < 140 && heros.y < 500 && heros.y > 400 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
 				heros.full_health();
+				isClicked = true;
 			}
 
 		}
@@ -350,6 +361,7 @@ int main(void) {
 			window.draw(map);
 			// mana update
 			inshop = false;
+			isClicked = false;
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
 			
@@ -404,7 +416,7 @@ int main(void) {
 			}
 			// fontanna
 			if (heros.x > 20 && heros.x < 140 && heros.y < 500 && heros.y > 400) {
-				enemyHP.setString("Full Health for 150 glod");
+				enemyHP.setString("Full Health (200 glod)");
 			}
 			for (int i = 0; i < zombie_counter; i++) {
 				if (z[i].isDead == false) {
@@ -488,9 +500,11 @@ int main(void) {
 			break;
 		case 7:
 			//sklep
+			window.clear();
+			shop.choice();
+			isClicked = false;
 			view = window.getDefaultView();
 			window.setView(window.getDefaultView());
-			window.clear();
 			shop.draw(window);
 			inshop = true;
 			break;

@@ -24,6 +24,8 @@ public:
 	sf::Text man;
 	sf::SoundBuffer krzyk;
 	sf::Sound scream;
+	sf::SoundBuffer picie;
+	sf::Sound drink;
 	
 
 
@@ -44,6 +46,8 @@ public:
 	int attack();
 	void take_dmga(int a, int &stan);
 	void full_health();
+	void life_potion();
+	void mana_potion();
 	
 	
 

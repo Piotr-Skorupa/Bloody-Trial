@@ -35,6 +35,8 @@ Hero::Hero()
 	
 	krzyk.loadFromFile("src/scream.wav");
 	scream.setBuffer(krzyk);
+	picie.loadFromFile("src/potion.wav");
+	drink.setBuffer(picie);
 
 
 }
@@ -177,6 +179,24 @@ void Hero::newgame() {
 void Hero::full_health() {
 	if (money > 150) {
 		life = life_max;
-		money -= 150;
+		mana = mana_max;
+		money -= 200;
 	}
+}
+
+void Hero::life_potion() {
+	if (potki_zycia !=0 && life < life_max - 30) {
+		life += 30;
+		potki_zycia -= 1;
+		drink.play();
+	}
+}
+
+void Hero::mana_potion() {
+	if (potki_many !=0 && mana < mana_max - 20) {
+		mana += 20;
+		potki_many -= 1;
+		drink.play();
+	}
+
 }
