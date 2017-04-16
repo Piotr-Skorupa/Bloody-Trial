@@ -15,6 +15,7 @@ public:
 	bool down;
 	bool left;
 	bool right;
+	int speed;
 	int x;
 	int y;
 	sf::Texture ziomek;
@@ -48,6 +49,9 @@ public:
 	void full_health();
 	void life_potion();
 	void mana_potion();
+	void weapon_change();
+	int returndmg1();
+	int returndmg2();
 	
 	
 

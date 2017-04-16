@@ -7,16 +7,13 @@
 #include <thread>
 #include "Hero.h"
 
-class Zombie
+class Dragon
 {
 private:
 	int _hp;
-	
 	std::thread z_thread;
-	
 
 public:
-	
 	sf::SoundBuffer pain;
 	sf::Sound getHit;
 	sf::SoundBuffer atakasz;
@@ -27,20 +24,16 @@ public:
 	int kierunek_z;
 	bool isMoving;
 	bool isDead;
-	sf::Texture trup;
-	sf::Sprite zombi;
+	sf::Texture smok;
+	sf::Sprite dragon;
 	sf::Texture dead;
-	int hajs;
-	
-	Zombie();
-	~Zombie();
-	void draw(sf::RenderWindow &window);
+
+	Dragon();
+	~Dragon();
 	void take_dmg(int a, int &b, int &c);
 	void move(bool g);
 	void makethread(bool g);
 	std::string hptext();
-	int get_money();
 	void newgame();
-	
 };
 

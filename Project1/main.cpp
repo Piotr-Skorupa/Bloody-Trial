@@ -16,11 +16,12 @@
 #include "Spell1.h"
 #include "Shop.h"
 #include "Zombie.h"
+#include "Dragon.h"
 
-void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan) {
+void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
 	while (g) {
 		for (int i = 0; i < 20;i++) {
-			if (x == true && z[i].isMoving == true) {
+			if (x == true && z[i].isMoving == true && numerAtak !=30) {
 				h.take_dmga(z[i]._dmg, stan);
 				bite.play();
 				std::cout << "atakuje" << std::endl;
@@ -31,6 +32,20 @@ void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan)
 	}
 }
 
+void attack_smok(Dragon &d, Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
+	while (g) {
+		
+			if (x == true && d.isMoving == true && numerAtak == 30) {
+				h.take_dmga(d._dmg, stan);
+				bite.play();
+				std::cout << "atakujesmok" << std::endl;
+				x = false;
+				sf::sleep(sf::milliseconds(1000));
+			}
+		
+	}
+}
+
 
 
 int main(void) {
@@ -38,7 +53,7 @@ int main(void) {
 	
 	//zmienne
 	const int zombie_counter = 20;
-	int liczba_zombie;
+	int liczba_zombie = 21;
 	int nrAtakowanego = 0;
 	int stan_okna = 0;
 	bool isFullscreen = false;
@@ -50,10 +65,12 @@ int main(void) {
 	int kierunek_z;
 	bool inshop = false;
 	bool isClicked = false;
-	
+	bool isGame_End = false;
+	int atak1;
+	int atak2;
 
 	std::thread atak_trupow;
-	
+	std::thread atak_smoka;
 		
 		
 	//WINDOW
@@ -87,6 +104,7 @@ int main(void) {
 	Shop shop;
 	Hero heros;
 	Zombie z[zombie_counter];
+	Dragon smok;
 
 	float hero_life = heros.stan_zycia();
 	float hero_lifemax = heros.getLifeMax();
@@ -108,6 +126,12 @@ int main(void) {
 	sound.setBuffer(soundbuffer);
 	sound.play();
 
+	sf::SoundBuffer buffer_win;
+	sf::Sound winnig;
+	if (!buffer_win.loadFromFile("src/win.wav"))
+		return -1; // error
+	winnig.setBuffer(buffer_win);
+	
 	sf::SoundBuffer strzal;
 	sf::Sound ogien;
 	if (!strzal.loadFromFile("src/fire.wav"))
@@ -145,7 +169,18 @@ int main(void) {
 	sf::Text enemyHP;
 	enemyHP.setFont(font);
 	enemyHP.setCharacterSize(25);
+
+	sf::Text lifepots;
+	lifepots.setFont(font);
+	lifepots.setCharacterSize(25);
+
+	sf::Text manapots;
+	manapots.setFont(font);
+	manapots.setCharacterSize(25);
 	
+	sf::Text you_win;
+	you_win.setFont(font);
+	you_win.setCharacterSize(200);
 	
 	//thready
 
@@ -153,9 +188,10 @@ int main(void) {
 		z[i].makethread(window.isOpen());
 		sf::sleep(sf::milliseconds(100));
 	}
+	smok.makethread(window.isOpen());
 	
-	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna));
-	
+	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
+	atak_smoka = std::thread(&attack_smok, std::ref(smok), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
 
 	//MAIN LOOP
 	while (window.isOpen())
@@ -165,12 +201,13 @@ int main(void) {
 		{
 			//QUIT
 			if (event.type == sf::Event::Closed) {
-				window.close();
 				isGamerunning = false;
+				sound.stop();
 				for (int i = 0; i < zombie_counter; i++) {
 					z[i].isDead = true;
 					z[i].isMoving = false;
 				}
+				window.close();
 			}
 			//pozycja myszki
 			sf::Vector2i& position = sf::Mouse::getPosition(window);
@@ -187,13 +224,14 @@ int main(void) {
 							
 			}
 			if (isGamerunning == false && sf::Mouse::isButtonPressed(sf::Mouse::Left) && position.x > 600 && position.y > 600 && position.x <738 && position.y <648 && stan_okna == 0) {
-				if (stan_okna == 0)	window.close();
 				isGamerunning = false;
 				for (int i = 0; i < zombie_counter; i++) {
 					z[i].isDead = true;
 					z[i].isMoving = false;
 				}
 				click.play();
+				sound.stop();
+				window.close();
 
 			}
 			if (isGamerunning == true && sf::Mouse::isButtonPressed(sf::Mouse::Left) && position.x > 600 && position.y > 600 && position.x < 738 && position.y < 648 && stan_okna == 0) {
@@ -257,6 +295,7 @@ int main(void) {
 				for (int i = 0; i < zombie_counter; i++) {
 					z[i].newgame();
 				}
+				smok.newgame();
 				
 				
 				
@@ -313,30 +352,49 @@ int main(void) {
 					
 				}
 				else if (isAttack_possible == true) {
-					z[nrAtakowanego].take_dmg(heros.attack(), heros.money);
-					attack_cel.play();
-					isAttack_possible = false;
-
+					if (nrAtakowanego == 30) {
+						smok.take_dmg(heros.attack(), heros.money, liczba_zombie);
+						attack_cel.play();
+						isAttack_possible = false;
+					}
+					else {
+						z[nrAtakowanego].take_dmg(heros.attack(), heros.money, liczba_zombie);
+						attack_cel.play();
+						isAttack_possible = false;
+					}
 					}
 				}
+			if (isClicked == false && stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)) {
+				heros.life_potion();
+				isClicked = true;
+			}
+			if (isClicked == false && stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)) {
+				heros.mana_potion();
+				isClicked = true;
+			}
 			//wejscie do sklepu
 			if (heros.x > 200 && heros.x < 360 && heros.y < 104 && stan_okna == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
 				stan_okna = 7;
+				isClicked = true;
 			}
 			if (stan_okna == 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 				stan_okna = 2;
 			}
 			//sklep w srodku
-			if (isClicked == false && shop.position < 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+			if (isClicked == false && shop.position < 7 && stan_okna == 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
 				shop.position += 1;
 				isClicked = true;
 			}
-			if (isClicked == false && shop.position > 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+			if (isClicked == false && stan_okna == 7 && shop.position > 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
 				shop.position -= 1;
 				isClicked = true;
 			}
+			if (isClicked == false && stan_okna == 7 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
+				isClicked = true;
+				shop.buy(heros, isClicked);
+			}
 			//fontanna
-			if (isClicked == false && hero_life != hero_lifemax && heros.x > 20 && heros.x < 140 && heros.y < 500 && heros.y > 400 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
+			if (isClicked == false && stan_okna == 2 && hero_life != hero_lifemax && heros.x > 20 && heros.x < 140 && heros.y < 500 && heros.y > 400 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)) {
 				heros.full_health();
 				isClicked = true;
 			}
@@ -362,6 +420,13 @@ int main(void) {
 			// mana update
 			inshop = false;
 			isClicked = false;
+			heros.weapon_change();
+			game.check_wep(heros);
+			
+			atak1 = heros.returndmg1();
+			atak2 = heros.returndmg2();
+			game.dmgTxt(atak1, atak2);
+
 			mana = heros.stan_many();
 			mana_max = heros.getManaMax();
 			
@@ -390,15 +455,30 @@ int main(void) {
 			window.setView(view);
 			heros.lifetexty();
 			game.cashText(heros.money);
+			game.pot1Txt(heros.potki_zycia);
+			game.pot2Txt(heros.potki_many);
 			game.cash.setPosition(heros.x - 860, heros.y + 480);
 			game.label.setPosition(heros.x - 960, heros.y + 350);
 			game.life.setPosition(heros.x - 860, heros.y +350);
 			game.mana.setPosition(heros.x - 860, heros.y + 400);
 			game.level.setPosition(heros.x - 650, heros.y + 390);
+			game.pot1.setPosition(heros.x - 550, heros.y + 390);
+			game.p1.setPosition(heros.x - 470, heros.y + 390);
+			game.pot2.setPosition(heros.x - 430, heros.y + 390);
+			game.p2.setPosition(heros.x - 350, heros.y + 390);
+			game.weapon.setPosition(heros.x - 300, heros.y + 390);
+			game.damage.setPosition(heros.x - 200, heros.y + 420);
 			heros.zyc.setPosition(heros.x - 840, heros.y + 360);
 			heros.man.setPosition(heros.x - 840, heros.y + 410);
 			enemyHP.setPosition(heros.x, heros.y - 500);
+			you_win.setPosition(heros.x - 300, heros.y - 200);
 			
+			//koniec gry
+			if (liczba_zombie == 0 && isGame_End == false) {
+				you_win.setString("You win !");
+				winnig.play();
+				isGame_End = true;
+			}
 			
 			// kolizja gracza z zombie (czy moga zaatakowac ? )
 			for (int i = 0; i < zombie_counter; i++) {
@@ -410,6 +490,12 @@ int main(void) {
 				}
 				
 			}
+			if (abs(heros.hero.getPosition().x - smok.dragon.getPosition().x) < 90 && abs(heros.hero.getPosition().y - smok.dragon.getPosition().y) < 90 && smok.isDead == false) {
+					isAttack_possible = true;
+					nrAtakowanego = 30;
+					enemyHP.setString("enemy hp: " + smok.hptext());
+
+				}
 			//shop
 			if (heros.x > 200 && heros.x < 360 && heros.y < 104) {
 				enemyHP.setString("Enter to the Shop");
@@ -428,11 +514,14 @@ int main(void) {
 				z[i].draw(window);
 			}
 			
+			window.draw(smok.dragon);
+
 			game.draw(window);
 			window.draw(heros.zyc);
 			window.draw(heros.man);
 			window.draw(heros.hero);
 			window.draw(enemyHP);
+			window.draw(you_win);
 			if (isFiring == true && mana > 9 ) {
 				Spell1 newSpell;
 				newSpell.setPos(heros.x - 25, heros.y - 25);
@@ -455,9 +544,13 @@ int main(void) {
 					spellVec[i].shoot(1);
 					for (int j = 0; j < zombie_counter; j++) {
 						if (abs(spellVec[i].bolt.getPosition().x - z[j].zombi.getPosition().x) < 80 && abs(spellVec[i].bolt.getPosition().y - z[j].zombi.getPosition().y) < 80 && z[j].isDead == false) {
-							z[j].take_dmg(spellVec[i].dmg, heros.money);
+							z[j].take_dmg(spellVec[i].dmg, heros.money, liczba_zombie);
 							spellVec[i].isShooted = true;
 						}
+					}
+					if (abs(spellVec[i].bolt.getPosition().x - smok.dragon.getPosition().x) < 180 && abs(spellVec[i].bolt.getPosition().y - smok.dragon.getPosition().y) < 180 && smok.isDead == false) {
+						smok.take_dmg(spellVec[i].dmg, heros.money, liczba_zombie);
+						spellVec[i].isShooted = true;
 					}
 					
 				}
@@ -501,8 +594,9 @@ int main(void) {
 		case 7:
 			//sklep
 			window.clear();
-			shop.choice();
 			isClicked = false;
+			shop.cashText(heros.money);
+			shop.choice();
 			view = window.getDefaultView();
 			window.setView(window.getDefaultView());
 			shop.draw(window);
@@ -514,6 +608,7 @@ int main(void) {
 		
 	}
 	atak_trupow.join();
+	atak_smoka.join();
 	return 0;
 }
 

@@ -29,6 +29,22 @@ Game::Game()
 	label.setTexture(pasek);
 	cash.setFont(font);
 	cash.setCharacterSize(28);
+	potman.loadFromFile("src/mana_pot.png");
+	potlif.loadFromFile("src/life_pot.png");
+	bron1.loadFromFile("src/basic_sword.png");
+	bron2.loadFromFile("src/steel_sword.png");
+	bron3.loadFromFile("src/long_sword.png");
+	bron4.loadFromFile("src/elven_sword.png");
+	bron5.loadFromFile("src/dragon_sword.png");
+	weapon.setTexture(bron1);
+	pot1.setTexture(potlif);
+	pot2.setTexture(potman);
+	p1.setFont(font);
+	p1.setCharacterSize(28);
+	p2.setFont(font);
+	p2.setCharacterSize(28);
+	damage.setFont(font);
+	damage.setCharacterSize(24);
 	
 }
 
@@ -55,7 +71,20 @@ void Game::draw(sf::RenderWindow &window) {
 	window.draw(level);
 	window.draw(mana);
 	window.draw(cash);
+	window.draw(pot1);
+	window.draw(pot2);
+	window.draw(p1);
+	window.draw(p2);
+	window.draw(weapon);
+	window.draw(damage);
 
+}
+
+void Game::dmgTxt(int x, int y) {
+	std::string _str = std::to_string(x);
+	std::string _str2 = std::to_string(y);
+	std::string elo = " Damage : " + _str + " - " + _str2;
+	damage.setString(elo);
 }
 
 void Game::lvlText(int x) {
@@ -70,4 +99,32 @@ void Game::cashText(int x) {
 	std::string elo = " Gold: " + _str;
 	cash.setString(elo);
 
+}
+
+void Game::pot1Txt(int x) {
+	std::string _str = std::to_string(x);
+	p1.setString(_str);
+}
+
+void Game::pot2Txt(int x) {
+	std::string _str = std::to_string(x);
+	p2.setString(_str);
+}
+
+void Game::check_wep(Hero &h) {
+	if (h.nr_broni == 0) {
+		weapon.setTexture(bron1);
+	}
+	else if (h.nr_broni == 1) {
+		weapon.setTexture(bron2);
+	}
+	else if (h.nr_broni == 2) {
+		weapon.setTexture(bron3);
+	}
+	else if (h.nr_broni == 3) {
+		weapon.setTexture(bron4);
+	}
+	else if (h.nr_broni == 4) {
+		weapon.setTexture(bron5);
+	}
 }

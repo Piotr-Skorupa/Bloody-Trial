@@ -9,6 +9,7 @@ Hero::Hero()
 	life = 100;
 	mana = 50;
 	str = 10;
+	speed = 20;
 	damage1 = 5;
 	damage2 = 10;
 	x = 20;
@@ -62,8 +63,8 @@ void Hero::moveLeft() {
 	if (x <= 0) isMoving = false;
 	else {
 			if (isMoving == true) {
-			x -= 10;
-			hero.move(-10, 0);
+			x -= speed;
+			hero.move(-speed, 0);
 			up = false;
 			down = false;
 			left = true;
@@ -77,8 +78,8 @@ void Hero::moveRight() {
 	if (x >= 4900) isMoving = false;
 	else {
 		if (isMoving == true) {
-			x += 10;
-			hero.move(10, 0);
+			x += speed;
+			hero.move(speed, 0);
 			up = false;
 			down = false;
 			left = false;
@@ -92,8 +93,8 @@ void Hero::moveUp() {
 	if (y <= 0) isMoving = false;
 	else {
 		if (isMoving == true) {
-			y -= 10;
-			hero.move(0, -10);
+			y -= speed;
+			hero.move(0, -speed);
 			up = true;
 			down = false;
 			left = false;
@@ -109,8 +110,8 @@ void Hero::moveDown() {
 	if (y >= 1900) isMoving = false;
 	else {
 		if (isMoving == true) {
-			y += 10;
-			hero.move(0, 10);
+			y += speed;
+			hero.move(0, speed);
 			up = false;
 			down = true;
 			left = false;
@@ -184,12 +185,26 @@ void Hero::full_health() {
 	}
 }
 
+int Hero::returndmg1() {
+	return damage1;
+}
+
+int Hero::returndmg2() {
+	return damage2;
+}
+
 void Hero::life_potion() {
 	if (potki_zycia !=0 && life < life_max - 30) {
 		life += 30;
 		potki_zycia -= 1;
 		drink.play();
 	}
+	else if (potki_zycia != 0 && life_max > life && life >= life_max - 30) {
+		life = life_max;
+		potki_zycia -= 1;
+		drink.play();
+	}
+
 }
 
 void Hero::mana_potion() {
@@ -198,5 +213,35 @@ void Hero::mana_potion() {
 		potki_many -= 1;
 		drink.play();
 	}
+	else if (potki_many != 0 && mana_max > mana && mana >= mana_max - 20) {
+		mana = mana_max;
+		potki_many -= 1;
+		drink.play();
+	}
 
+}
+
+void Hero::weapon_change() {
+	switch (nr_broni) {
+	case 0:
+		damage1 = 5;
+		damage2 = 10;
+		break;
+	case 1:
+		damage1 = 8;
+		damage2 = 15;
+		break;
+	case 2:
+		damage1 = 5;
+		damage2 = 20;
+		break;
+	case 3:
+		damage1 = 15;
+		damage2 = 25;
+		break;
+	case 4:
+		damage1 = 20;
+		damage2 = 40;
+		break;
+	}
 }

@@ -1,102 +1,81 @@
-#include "Zombie.h"
+#include "Dragon.h"
 
 
 
-Zombie::Zombie()
+Dragon::Dragon()
 {
-
-	_hp = 30;
-	_dmg = 10;
-	x = 500 + (std::rand() % (3500 - 500 + 1));
-	y = 600 + (std::rand() % (1850 - 600 + 1));
+	x = 4700;
+	y = 900;
+	_hp = 200;
+	_dmg = 20;
 	isMoving = true;
 	isDead = false;
-	trup.loadFromFile("src/zombie.png");
-	dead.loadFromFile("src/zombie_trup.png");
-	zombi.setTexture(trup);
-	zombi.setPosition(x, y);
+	smok.loadFromFile("src/dragon.png");
+	dead.loadFromFile("src/deaddragon.png");
+	dragon.setTexture(smok);
+	dragon.setPosition(x, y);
 	pain.loadFromFile("src/zombie_pain.wav");
 	getHit.setBuffer(pain);
-	atakasz.loadFromFile("src/bite.wav");
-	bite.setBuffer(atakasz);
-	
-
 }
 
-void Zombie::newgame() {
-	_hp = 30;
-	x = 500 + (std::rand() % (3500 - 500 + 1));
-	y = 600 + (std::rand() % (1850 - 600 + 1));
+void Dragon::newgame() {
+	_hp = 200;
+	x = 4700;
+	y = 900;
 	isMoving = true;
 	isDead = false;
+	dragon.setTexture(smok);
 }
 
-
-
-void Zombie::draw(sf::RenderWindow &window) {
-	window.draw(zombi);
+std::string Dragon::hptext() {
+	return std::to_string(_hp);
 }
 
-void Zombie::take_dmg(int a, int &b, int &c) {
+void Dragon::take_dmg(int a, int &b, int &c) {
 	_hp -= a;
 	getHit.play();
 	if (_hp <= 0) {
 		isDead = true;
 		isMoving = false;
-		zombi.setTexture(dead);
-		b += get_money();
-		c -= 1;
+		dragon.setTexture(dead);
+		b += 500;
+		c-=1;
 	}
 }
 
-
-
-
-int Zombie::get_money() {
-	hajs = 1 + (std::rand() % (4 - 1 + 1));
-	if (hajs == 1) {
-		return 200;
-	}
-	else if (hajs == 2) {
-		return 50;
-	}
-	else if (hajs == 3) {
-		return 100;
-	}
-	else if (hajs == 4) {
-		return 150;
-	}
-	
+Dragon::~Dragon()
+{
+	z_thread.join();
 }
 
-void Zombie::move(bool g) {
-	
+void Dragon::move(bool g) {
+
 	while (g == true)
 	{
-		
+
 		if (isMoving == true) {
 			kierunek_z = 1 + (std::rand() % (4 - 1 + 1));
 			//lewo
 			if (kierunek_z == 1) {
-				if (zombi.getPosition().x > 200) {
+				if (dragon.getPosition().x > 200) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(-4, 0);
-							
+							dragon.move(-4, 0);
+
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(-4, 0);
-							
+							dragon.move(-4, 0);
+
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(-4, 0);
-							
+							dragon.move(-4, 0);
+
 						}
 					}
 				}
@@ -105,25 +84,25 @@ void Zombie::move(bool g) {
 
 			//prawo
 			if (kierunek_z == 2) {
-				if (zombi.getPosition().x < 4700) {
+				if (dragon.getPosition().x < 4700) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(4, 0);
-							
+							dragon.move(4, 0);
+
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(4, 0);
-							
+							dragon.move(4, 0);
+
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(4, 0);
-							
+							dragon.move(4, 0);
+
 						}
 					}
 				}
@@ -131,25 +110,25 @@ void Zombie::move(bool g) {
 			}
 			//gora	
 			if (kierunek_z == 3) {
-				if (zombi.getPosition().y > 100) {
+				if (dragon.getPosition().y > 100) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(0, -4);
-							
+							dragon.move(0, -4);
+
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(0, -4);
-							
+							dragon.move(0, -4);
+
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(0, -4);
-							
+							dragon.move(0, -4);
+
 						}
 					}
 				}
@@ -157,25 +136,25 @@ void Zombie::move(bool g) {
 			}
 			//dol	
 			if (kierunek_z == 4) {
-				if (zombi.getPosition().y < 1880) {
+				if (dragon.getPosition().y < 1880) {
 					int bb = 1 + (std::rand() % (3 - 1 + 1));
 					if (isMoving == true && bb == 1) {
 						for (int i = 0; i < 5; i++) {
-							zombi.move(0, 4);
-							
+							dragon.move(0, 4);
+
 						}
 					}
 					if (isMoving == true && bb == 2) {
 						for (int i = 0; i < 10; i++) {
-							zombi.move(0, 4);
-							
+							dragon.move(0, 4);
+
 						}
 
 					}
 					if (isMoving == true && bb == 3) {
 						for (int i = 0; i < 15; i++) {
-							zombi.move(0, 4);
-							
+							dragon.move(0, 4);
+
 						}
 					}
 				}
@@ -184,22 +163,13 @@ void Zombie::move(bool g) {
 		}
 		sf::sleep(sf::milliseconds(200));
 	}
-	
-	
+
+
 }
 
-void Zombie::makethread(bool g) {
-	z_thread = std::thread(&Zombie::move, this, g);
-	
-	
+void Dragon::makethread(bool g) {
+	z_thread = std::thread(&Dragon::move, this, g);
+
+
 }
 
-std::string Zombie::hptext() {
-	return std::to_string(_hp);
-}
-
-Zombie::~Zombie()
-{
-	z_thread.join();
-	
-}
