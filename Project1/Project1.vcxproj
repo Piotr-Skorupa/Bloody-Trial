@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -141,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Options.h" />

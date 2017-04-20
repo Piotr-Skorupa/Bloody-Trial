@@ -17,6 +17,7 @@
 #include "Shop.h"
 #include "Zombie.h"
 #include "Dragon.h"
+#include "Ghost.h"
 
 void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
 	while (g) {
@@ -55,7 +56,7 @@ int main(void) {
 	const int zombie_counter = 20;
 	int liczba_zombie = 21;
 	int nrAtakowanego = 0;
-	int stan_okna = 0;
+	int stan_okna = 8;
 	bool isFullscreen = false;
 	bool isGamerunning = false;
 	bool isFiring = false;
@@ -80,6 +81,12 @@ int main(void) {
 	view = window.getDefaultView();
 	window.setView(view);
 
+	sf::Texture intro_texture;
+	sf::Sprite intro;
+	intro_texture.loadFromFile("src/intro.png");
+	intro.setTexture(intro_texture);
+	intro.setPosition(0, 0);
+	
 
 	sf::Texture text;
 	text.loadFromFile("src/sure.png");
@@ -104,6 +111,9 @@ int main(void) {
 	Shop shop;
 	Hero heros;
 	Zombie z[zombie_counter];
+	Ghost duch1(100,1450);
+	Ghost duch2(100, 1620);
+	
 	Dragon smok;
 
 	float hero_life = heros.stan_zycia();
@@ -182,13 +192,18 @@ int main(void) {
 	you_win.setFont(font);
 	you_win.setCharacterSize(200);
 	
-	//thready
+	
 
+	//thready
+	duch1.makethread(window.isOpen());
 	for (int i = 0; i < zombie_counter; i++) {
 		z[i].makethread(window.isOpen());
 		sf::sleep(sf::milliseconds(100));
 	}
 	smok.makethread(window.isOpen());
+	
+	duch2.makethread(window.isOpen());
+
 	
 	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
 	atak_smoka = std::thread(&attack_smok, std::ref(smok), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
@@ -208,6 +223,10 @@ int main(void) {
 					z[i].isMoving = false;
 				}
 				window.close();
+			}
+			//intro
+			if (stan_okna == 8 && ( sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))) {
+				stan_okna = 0;
 			}
 			//pozycja myszki
 			sf::Vector2i& position = sf::Mouse::getPosition(window);
@@ -515,7 +534,8 @@ int main(void) {
 			}
 			
 			window.draw(smok.dragon);
-
+			duch1.draw(window);
+			duch2.draw(window);
 			game.draw(window);
 			window.draw(heros.zyc);
 			window.draw(heros.man);
@@ -601,6 +621,10 @@ int main(void) {
 			window.setView(window.getDefaultView());
 			shop.draw(window);
 			inshop = true;
+			break;
+		case 8:
+			window.clear();
+			window.draw(intro);
 			break;
 		}
 		
