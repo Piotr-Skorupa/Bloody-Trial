@@ -315,6 +315,8 @@ int main(void) {
 					z[i].newgame();
 				}
 				smok.newgame();
+				duch1.newgame1(100, 1450);
+				duch2.newgame1(100, 1620);
 				
 				
 				
@@ -373,6 +375,16 @@ int main(void) {
 				else if (isAttack_possible == true) {
 					if (nrAtakowanego == 30) {
 						smok.take_dmg(heros.attack(), heros.money, liczba_zombie);
+						attack_cel.play();
+						isAttack_possible = false;
+					}
+					else if (nrAtakowanego == 31) {
+						duch1.take_dmga(heros.attack(), heros.money, liczba_zombie);
+						attack_cel.play();
+						isAttack_possible = false;
+					}
+					else if (nrAtakowanego == 32) {
+						duch2.take_dmga(heros.attack(), heros.money, liczba_zombie);
 						attack_cel.play();
 						isAttack_possible = false;
 					}
@@ -515,6 +527,18 @@ int main(void) {
 					enemyHP.setString("enemy hp: " + smok.hptext());
 
 				}
+			if (abs(heros.hero.getPosition().x - duch1.zombi.getPosition().x) < 90 && abs(heros.hero.getPosition().y - duch1.zombi.getPosition().y) < 90 && duch1.isDead == false) {
+				isAttack_possible = true;
+				nrAtakowanego = 31;
+				enemyHP.setString("enemy hp: " + duch1.hptexta());
+
+			}
+			if (abs(heros.hero.getPosition().x - duch2.zombi.getPosition().x) < 90 && abs(heros.hero.getPosition().y - duch2.zombi.getPosition().y) < 90 && duch2.isDead == false) {
+				isAttack_possible = true;
+				nrAtakowanego = 32;
+				enemyHP.setString("enemy hp: " + duch2.hptexta());
+
+			}
 			//shop
 			if (heros.x > 200 && heros.x < 360 && heros.y < 104) {
 				enemyHP.setString("Enter to the Shop");

@@ -6,7 +6,7 @@ Ghost::Ghost(int xo, int yo)
 {
 	x = xo;
 	y = yo;
-	_hp = 30;
+	_hp = 60;
 	_dmg = 12;
 	isMoving = true;
 	isDead = false;
@@ -20,8 +20,34 @@ Ghost::Ghost(int xo, int yo)
 	bite.setBuffer(atakasz);
 }
 
+std::string Ghost::hptexta() {
+	return std::to_string(_hp);
+}
+
+
+void Ghost::newgame1(int xo, int yo) {
+	x = xo;
+	y = yo;
+	_hp = 60;
+	_dmg = 12;
+	isMoving = true;
+	isDead = false;
+}
+
 int Ghost::money_get() {
 	return _gold;
+}
+
+void Ghost::take_dmga(int a, int &b, int &c) {
+	_hp -= a;
+	getHit.play();
+	if (_hp <= 0) {
+		isDead = true;
+		isMoving = false;
+		zombi.setTexture(dead);
+		b += _gold;
+		c -= 1;
+	}
 }
 
 Ghost::~Ghost()
