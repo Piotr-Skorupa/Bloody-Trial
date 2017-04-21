@@ -58,7 +58,7 @@ int Zombie::get_money() {
 		return 200;
 	}
 	else if (hajs == 2) {
-		return 50;
+		return 250;
 	}
 	else if (hajs == 3) {
 		return 100;

@@ -12,7 +12,7 @@ public:
 	~Ghost();
 private:
 	int _hp;
-	const int _gold = 300;
+	const int _gold = 400;
 	std::thread z_thread;
 };
 

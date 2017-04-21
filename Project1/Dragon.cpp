@@ -38,7 +38,7 @@ void Dragon::take_dmg(int a, int &b, int &c) {
 		isDead = true;
 		isMoving = false;
 		dragon.setTexture(dead);
-		b += 500;
+		b += 1000;
 		c-=1;
 	}
 }

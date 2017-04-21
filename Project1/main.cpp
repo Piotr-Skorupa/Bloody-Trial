@@ -22,7 +22,7 @@
 void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
 	while (g) {
 		for (int i = 0; i < 20;i++) {
-			if (x == true && z[i].isMoving == true && numerAtak !=30) {
+			if (x == true && z[i].isMoving == true && numerAtak <30) {
 				h.take_dmga(z[i]._dmg, stan);
 				bite.play();
 				std::cout << "atakuje" << std::endl;
@@ -47,6 +47,27 @@ void attack_smok(Dragon &d, Hero &h, bool &x, sf::Sound &bite, bool g, int &stan
 	}
 }
 
+void attack_duch(Ghost &d,Ghost &d2, Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
+	while (g) {
+
+		if (x == true && d.isMoving == true && numerAtak == 31 ) {
+			h.take_dmga(d._dmg, stan);
+			bite.play();
+			std::cout << "atakujeduch1" << std::endl;
+			x = false;
+			sf::sleep(sf::milliseconds(1000));
+		}
+		if (x == true && d2.isMoving == true && numerAtak == 32) {
+			h.take_dmga(d2._dmg, stan);
+			bite.play();
+			std::cout << "atakujeduch2" << std::endl;
+			x = false;
+			sf::sleep(sf::milliseconds(1000));
+		}
+
+	}
+}
+
 
 
 int main(void) {
@@ -54,7 +75,7 @@ int main(void) {
 	
 	//zmienne
 	const int zombie_counter = 20;
-	int liczba_zombie = 21;
+	int liczba_zombie = 23;
 	int nrAtakowanego = 0;
 	int stan_okna = 8;
 	bool isFullscreen = false;
@@ -72,6 +93,7 @@ int main(void) {
 
 	std::thread atak_trupow;
 	std::thread atak_smoka;
+	std::thread atak_duchow;
 		
 		
 	//WINDOW
@@ -207,6 +229,7 @@ int main(void) {
 	
 	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
 	atak_smoka = std::thread(&attack_smok, std::ref(smok), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
+	atak_duchow = std::thread(&attack_duch, std::ref(duch1), std::ref(duch2), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
 
 	//MAIN LOOP
 	while (window.isOpen())
@@ -594,6 +617,14 @@ int main(void) {
 					}
 					if (abs(spellVec[i].bolt.getPosition().x - smok.dragon.getPosition().x) < 180 && abs(spellVec[i].bolt.getPosition().y - smok.dragon.getPosition().y) < 180 && smok.isDead == false) {
 						smok.take_dmg(spellVec[i].dmg, heros.money, liczba_zombie);
+						spellVec[i].isShooted = true;
+					}
+					if (abs(spellVec[i].bolt.getPosition().x - duch1.zombi.getPosition().x) < 80 && abs(spellVec[i].bolt.getPosition().y - duch1.zombi.getPosition().y) < 80 && duch1.isDead == false) {
+						duch1.take_dmga(spellVec[i].dmg, heros.money, liczba_zombie);
+						spellVec[i].isShooted = true;
+					}
+					if (abs(spellVec[i].bolt.getPosition().x - duch2.zombi.getPosition().x) < 80 && abs(spellVec[i].bolt.getPosition().y - duch2.zombi.getPosition().y) < 80 && duch2.isDead == false) {
+						duch2.take_dmga(spellVec[i].dmg, heros.money, liczba_zombie);
 						spellVec[i].isShooted = true;
 					}
 					
