@@ -19,7 +19,7 @@
 #include "Dragon.h"
 #include "Ghost.h"
 
-void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
+void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool &g, int &stan, int &numerAtak) {
 	while (g) {
 		for (int i = 0; i < 20;i++) {
 			if (x == true && z[i].isMoving == true && numerAtak <30) {
@@ -33,7 +33,7 @@ void attack_on(Zombie z[], Hero &h, bool &x, sf::Sound &bite, bool g, int &stan,
 	}
 }
 
-void attack_smok(Dragon &d, Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
+void attack_smok(Dragon &d, Hero &h, bool &x, sf::Sound &bite, bool &g, int &stan, int &numerAtak) {
 	while (g) {
 		
 			if (x == true && d.isMoving == true && numerAtak == 30) {
@@ -47,7 +47,7 @@ void attack_smok(Dragon &d, Hero &h, bool &x, sf::Sound &bite, bool g, int &stan
 	}
 }
 
-void attack_duch(Ghost &d,Ghost &d2, Hero &h, bool &x, sf::Sound &bite, bool g, int &stan, int &numerAtak) {
+void attack_duch(Ghost &d,Ghost &d2, Hero &h, bool &x, sf::Sound &bite, bool &g, int &stan, int &numerAtak) {
 	while (g) {
 
 		if (x == true && d.isMoving == true && numerAtak == 31 ) {
@@ -90,6 +90,7 @@ int main(void) {
 	bool isGame_End = false;
 	int atak1;
 	int atak2;
+	bool thread_bool;
 
 	std::thread atak_trupow;
 	std::thread atak_smoka;
@@ -102,6 +103,8 @@ int main(void) {
 	sf::View view;
 	view = window.getDefaultView();
 	window.setView(view);
+
+	thread_bool = true;
 
 	sf::Texture intro_texture;
 	sf::Sprite intro;
@@ -227,9 +230,9 @@ int main(void) {
 	duch2.makethread(window.isOpen());
 
 	
-	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
-	atak_smoka = std::thread(&attack_smok, std::ref(smok), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
-	atak_duchow = std::thread(&attack_duch, std::ref(duch1), std::ref(duch2), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), window.isOpen(), std::ref(stan_okna), std::ref(nrAtakowanego));
+	atak_trupow = std::thread(&attack_on, z, std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), std::ref(thread_bool), std::ref(stan_okna), std::ref(nrAtakowanego));
+	atak_smoka = std::thread(&attack_smok, std::ref(smok), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), std::ref(thread_bool), std::ref(stan_okna), std::ref(nrAtakowanego));
+	atak_duchow = std::thread(&attack_duch, std::ref(duch1), std::ref(duch2), std::ref(heros), std::ref(isAttack_possible), std::ref(z[0].bite), std::ref(thread_bool), std::ref(stan_okna), std::ref(nrAtakowanego));
 
 	//MAIN LOOP
 	while (window.isOpen())
@@ -608,7 +611,7 @@ int main(void) {
 				if (spellVec[i].isShooted == false) {
 					spellVec[i].setTex();
 					spellVec[i].draw(window);
-					spellVec[i].shoot(1);
+					spellVec[i].shoot(2);
 					for (int j = 0; j < zombie_counter; j++) {
 						if (abs(spellVec[i].bolt.getPosition().x - z[j].zombi.getPosition().x) < 80 && abs(spellVec[i].bolt.getPosition().y - z[j].zombi.getPosition().y) < 80 && z[j].isDead == false) {
 							z[j].take_dmg(spellVec[i].dmg, heros.money, liczba_zombie);
@@ -686,8 +689,10 @@ int main(void) {
 		window.display();
 		
 	}
+	thread_bool = false;
 	atak_trupow.join();
 	atak_smoka.join();
+	atak_duchow.join();
 	return 0;
 }
 
