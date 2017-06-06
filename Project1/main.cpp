@@ -82,6 +82,7 @@ int main(void) {
 	bool isGamerunning = false;
 	bool isFiring = false;
 	bool isAttack_possible = false;
+	bool isAttack = false;
 	float m;
 	float l;
 	int kierunek_z;
@@ -343,8 +344,7 @@ int main(void) {
 				smok.newgame();
 				duch1.newgame1(100, 1450);
 				duch2.newgame1(100, 1620);
-				
-				
+				you_win.setString("");
 				
 			}
 			//continue game
@@ -394,6 +394,7 @@ int main(void) {
 				isFiring = true;
 				}
 			if (stan_okna == 2  && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+				isAttack = true;
 				if (isAttack_possible == false) {
 					attack_air.play();
 					
@@ -479,7 +480,44 @@ int main(void) {
 			isClicked = false;
 			heros.weapon_change();
 			game.check_wep(heros);
-			
+			//animation od attacking !
+			if (isAttack == true) {
+				if (heros.Right == true) {
+					heros.rect.top = 0;
+					heros.rect.left = 400;
+					if (heros.clock.getElapsedTime().asSeconds() > 0.2f) {
+						if (heros.rect.left == 500)
+							heros.rect.left = 400;
+						else
+							heros.rect.left += 100;
+
+						heros.hero.setTextureRect(heros.rect);
+						heros.clock.restart();
+						isAttack = false;
+						
+					}
+				}
+				if (heros.Left == true) {
+					heros.rect.top = 0;
+					heros.rect.left = 300;
+					if (heros.clock.getElapsedTime().asSeconds() > 0.2f) {
+						if (heros.rect.left == 200)
+							heros.rect.left = 300;
+						else
+							heros.rect.left -= 100;
+
+						heros.hero.setTextureRect(heros.rect);
+						heros.clock.restart();
+						isAttack = false;
+					}
+				}
+				
+			}
+			else {
+				heros.rect.top = 100;
+				
+			}
+
 			atak1 = heros.returndmg1();
 			atak2 = heros.returndmg2();
 			game.dmgTxt(atak1, atak2);

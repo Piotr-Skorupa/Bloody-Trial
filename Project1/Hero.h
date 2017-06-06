@@ -15,9 +15,13 @@ public:
 	bool down;
 	bool left;
 	bool right;
+	bool Right;
+	bool Left;
 	int speed;
 	int x;
 	int y;
+	sf::Clock clock;
+	sf::IntRect rect;
 	sf::Texture ziomek;
 	sf::Sprite hero;
 	sf::Font font;

@@ -20,14 +20,17 @@ Hero::Hero()
 	down = false;
 	left = false;
 	right = true;
+	Right = true;
+	Left = false;
 	potki_many = 1;
 	potki_zycia = 1;
 	money = 100;
 	nr_broni = 0;
 
+	rect = sf::IntRect(400, 100, 100, 100);
 	font.loadFromFile("src/Oswald-Stencil.ttf");
 	ziomek.loadFromFile("src/hero.png");
-	hero.setTexture(ziomek);
+	hero = sf::Sprite(ziomek, rect);
 	hero.setPosition(x, y);
 	zyc.setFont(font);
 	man.setFont(font);
@@ -63,13 +66,28 @@ void Hero::moveLeft() {
 	if (x <= 0) isMoving = false;
 	else {
 			if (isMoving == true) {
+				if (Right) {
+					rect = sf::IntRect(300, 100, 100, 100);
+			}
 			x -= speed;
 			hero.move(-speed, 0);
 			up = false;
 			down = false;
 			left = true;
 			right = false;
+			Right = false;
+			Left = true;
 		}
+	}
+	
+	if (clock.getElapsedTime().asSeconds() > 0.2f) {
+		if (rect.left == 0)
+			rect.left = 300;
+		else
+			rect.left -= 100;
+
+		hero.setTextureRect(rect);
+		clock.restart();
 	}
 }
 
@@ -78,13 +96,28 @@ void Hero::moveRight() {
 	if (x >= 4900) isMoving = false;
 	else {
 		if (isMoving == true) {
+			if (Left) {
+				rect = sf::IntRect(400, 100, 100, 100);
+			}
 			x += speed;
 			hero.move(speed, 0);
 			up = false;
 			down = false;
 			left = false;
 			right = true;
+			Right = true;
+			Left = false;
 		}
+	}
+	
+	if (clock.getElapsedTime().asSeconds() > 0.2f) {
+		if (rect.left == 700)
+			rect.left = 400;
+		else
+			rect.left += 100;
+
+		hero.setTextureRect(rect);
+		clock.restart();
 	}
 }
 
@@ -99,6 +132,28 @@ void Hero::moveUp() {
 			down = false;
 			left = false;
 			right = false;
+		}
+	}
+	if (Right == true) {
+		if (clock.getElapsedTime().asSeconds() > 0.2f) {
+			if (rect.left == 700)
+				rect.left = 400;
+			else
+				rect.left += 100;
+
+			hero.setTextureRect(rect);
+			clock.restart();
+		}
+	}
+	if (Left == true) {
+		if (clock.getElapsedTime().asSeconds() > 0.2f) {
+			if (rect.left == 0)
+				rect.left = 300;
+			else
+				rect.left -= 100;
+
+			hero.setTextureRect(rect);
+			clock.restart();
 		}
 	}
 }
@@ -116,6 +171,28 @@ void Hero::moveDown() {
 			down = true;
 			left = false;
 			right = false;
+		}
+	}
+	if (Right == true) {
+		if (clock.getElapsedTime().asSeconds() > 0.2f) {
+			if (rect.left == 700)
+				rect.left = 400;
+			else
+				rect.left += 100;
+
+			hero.setTextureRect(rect);
+			clock.restart();
+		}
+	}
+	if (Left == true) {
+		if (clock.getElapsedTime().asSeconds() > 0.2f) {
+			if (rect.left == 0)
+				rect.left = 300;
+			else
+				rect.left -= 100;
+
+			hero.setTextureRect(rect);
+			clock.restart();
 		}
 	}
 }

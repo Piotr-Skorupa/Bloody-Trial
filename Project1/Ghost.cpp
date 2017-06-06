@@ -32,6 +32,7 @@ void Ghost::newgame1(int xo, int yo) {
 	_dmg = 12;
 	isMoving = true;
 	isDead = false;
+	zombi.setTexture(trup);
 }
 
 int Ghost::money_get() {
